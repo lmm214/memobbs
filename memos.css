@@ -668,6 +668,7 @@ buttom.cancel-edit-btn{margin-left:-1rem;}
 @media (max-width:550px) {
 	.db-card{margin:0.8rem 1rem;}
 	.db-card-comment{display: none;}
+	input.search-memos-input{max-width:60px;}
 }
 .db-card{box-shadow: none;margin:-10px -1rem 10px;}
 .dark .db-card{background:#252627;}
