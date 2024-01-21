@@ -228,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   // 获取自定义列表
-  if(typeof memosMyJson !== 'undefined'){
+  if(typeof memosJson !== 'undefined'){
     try {
       memoOurList = await getMemoListData(memosJson.url); // 获取自定义列表
     } catch (error) {
