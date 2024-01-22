@@ -710,7 +710,7 @@ userlistBtn.addEventListener("click", function () {
     let userlistDom = `<div class="userlist card-item d-flex flex-wrap mb-3 animate__animated animate__fadeIn">`;
     for (var i = 0; i < memoList.length; i++) {
       let nowMemo = memoList[i]
-      userlistDom += `<div onclick="getUserMemos(${nowMemo.link}, ${nowMemo.creatorId},${nowMemo.creatorName},${nowMemo.avatar})" class="item-avatar" style="background-image:url(${nowMemo.avatar})"></div>`
+      userlistDom += `<div onclick="getUserMemos("${nowMemo.link}", "${nowMemo.creatorId}","${nowMemo.creatorName}","${nowMemo.avatar}")" class="item-avatar" style="background-image:url(${nowMemo.avatar})"></div>`
     }
     userlistDom += `</div>`;
     memosDom.insertAdjacentHTML('beforebegin', userlistDom);
