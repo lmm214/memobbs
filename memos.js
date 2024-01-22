@@ -469,7 +469,7 @@ async function updateHtml(data) {
     let memosVisibility = memo.visibility
     let twikooEnv = memo.twikoo;
     let artalkEnv = memo.artalk;
-    let artSite = memo.artSite;
+    let artSite = `${memo.artSite}`;
     let memosLink = memo.link + "/m/" + memo.id;
     let memosRes = memo.content
       .replace(TAG_REG, "")
@@ -837,7 +837,7 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
           item.link = memosPath
           item.twikoo = memosMeTwikoo
           item.artalk = memosMeArtalk
-          item.artSite = memosMeArtalkSite
+          item.artSite = `${memosMeArtalkSite}`
         });
         if (mode == "NOPUBLIC") {
           memosCount = data.length;
