@@ -16,21 +16,21 @@ var memoDefaultList = [
     "website": "https://immmmm.com",
     "link": "https://me.edui.fun",
     "creatorId": "101",
-    "avatar": "https://cravatar.cn/avatar/ba83fa02fc4b2ba621514941307e21be?s=80",
+    "avatar": "https://gravatar.memobbs.app/avatar/ba83fa02fc4b2ba621514941307e21be?s=80",
     "twikoo": "https://metk.edui.fun"
   },{
     "creatorName": "归臧",
     "website": "https://nuoea.com/",
     "link": "https://memos.nuoea.com",
     "creatorId": "101",
-    "avatar": "https://cravatar.cn/avatar/020d365ea2596ef6d516143bb0552704?s=80",
+    "avatar": "https://gravatar.memobbs.app/avatar/020d365ea2596ef6d516143bb0552704?s=80",
     "twikoo": "https://twikoo.nuoea.com"
   },{
     "creatorName": "koobai",
     "website": "https://koobai.com",
     "link": "https://memos.koobai.com",
     "creatorId": "1",
-    "avatar": "https://cravatar.cn/avatar/3b3d336a7d389b7ae8531cbe177ae9b7?s=80",
+    "avatar": "https://gravatar.memobbs.app/avatar/3b3d336a7d389b7ae8531cbe177ae9b7?s=80",
     "artalk": "https://c.koobai.com",
     "artSite": "空白唠叨"
   }
@@ -112,6 +112,9 @@ var memosEditorCont = `
           <div class="button outline random-btn mr-2 p-2">
             <svg xmlns="http://www.w3.org/2000/svg" width=".9rem" height=".9rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2l4 4l-4 4M2 6h1.9c1.5 0 2.9.9 3.6 2.2M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14l4 4l-4 4"/></g></svg>
           </div>
+          <div class="button outline oneday-btn d-none p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><path d="M16 2v4M8 2v4m-5 4h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></g></svg>
+          </div>
         </div>
         <div class="editor-submit d-flex flex-fill justify-content-end">
           <div class="editor-selector select outline mr-5">
@@ -153,6 +156,7 @@ var codeBtn = document.querySelector(".code-btn");
 var linkBtn = document.querySelector(".link-btn");
 var linkPicBtn = document.querySelector(".linkpic-btn");
 var randomBtn = document.querySelector(".random-btn");
+var oneDayBtn = document.querySelector(".oneday-btn");
 var privateBtn = document.querySelector(".private-btn");
 var switchUserBtn = document.querySelector(".switchUser-btn");
 var loadEditorBtn = document.querySelector(".call-memos-editor");
@@ -291,7 +295,7 @@ function memoFollow(mode) {
   usernowBtnDom.forEach((item) => {item.classList.remove('current');})
   if(mode == "MEMOSHOME"){
     goHomeBtn.classList.add("current")
-    getUserMemos(nowLink,nowId,nowName,nowAvatar)
+    getUserMemos(nowLink,nowId,nowName,nowAvatar,"","","MEMOSHOME")
   }else if(mode == "MEMOSBBS"){
     goBbsBtn.classList.add("current")
     getMemos();
@@ -299,6 +303,8 @@ function memoFollow(mode) {
     randomUserBtn.classList.add("current")
     goRandUser()
   }else if(mode == "NOPUBLIC"){
+    getUserMemos(nowLink,nowId,nowName,nowAvatar,"","",mode)
+  }else if(mode == "oneday"){
     getUserMemos(nowLink,nowId,nowName,nowAvatar,"","",mode)
   }else{
     goHomeBtn.classList.add("current")
@@ -409,16 +415,34 @@ function memoFollow(mode) {
   this.getMemoCount = getMemoCount;
 
   function updateData(res) {
-    res.sort((i,o)=>{
-      return( o.createdTs - i.createdTs)
-    })
-    pagination(res)
-    dataNum = Math.ceil(res.length/limit);
-    nums = dataNum - 1;
-    if (page > nums) {
-      loadBtn.classList.add('d-none');
-      return
-    };
+    let oneDayTag = window.localStorage && window.localStorage.getItem("memos-oneday-tag");
+    if(oneDayTag !== null){
+      const firstItem = res.slice(0, 1);
+      const restItems = res.slice(1);
+      // 对后面的内容进行排序
+      restItems.sort((a, b) => b.createdTs - a.createdTs);
+      // 将两部分合并在一起
+      const sortedArray = firstItem.concat(restItems);
+      // 返回排序后的数组
+      pagination(sortedArray)
+      dataNum = Math.ceil(sortedArray.length/limit);
+      nums = dataNum - 1;
+      if (page > nums) {
+        loadBtn.classList.add('d-none');
+        return
+      };
+    }else{
+      res.sort((i,o)=>{
+        return( o.createdTs - i.createdTs)
+      })
+      pagination(res)
+      dataNum = Math.ceil(res.length/limit);
+      nums = dataNum - 1;
+      if (page > nums) {
+        loadBtn.classList.add('d-none');
+        return
+      };
+    }
   }
   this.updateData = updateData;
 
@@ -436,6 +460,9 @@ function memoFollow(mode) {
 
 // 插入 html 
 async function updateHtml(data) {
+  let oneDayClass = "oneday";
+  let memosMode = window.localStorage && window.localStorage.getItem("memos-mode");
+  let oneDayTag = window.localStorage && window.localStorage.getItem("memos-oneday-tag");
   let result = '',itemOption = '',itemContent = '';
   let TAG_REG = /#([^#\s!.,;:?"'()]+)(?= )/g, 
     IMG_REG = /\!\[(.*?)\]\((.*?)\)/g,
@@ -559,7 +586,7 @@ async function updateHtml(data) {
       itemContent += `<div class="d-flex flex-fill justify-content-end"></div></div>`;
     }
     itemContent += `</div></div></div>`
-    result += `<div class="memo-${memosId} d-flex animate__animated mb-3"><div class="card-item flex-fill p-3"><div class="item-header d-flex mb-3"><div class="d-flex flex-fill"><div onclick="getUserMemos('${link}', '${creatorId}','${creatorName}','${avatar}')" class="item-avatar mr-2" style="background-image:url(${avatar})"></div><div class="item-sub d-flex flex-column p-1"><div class="item-creator"><a href="${website}" target="_blank">${creatorName}</a></div><div class="item-mate mt-2 text-xs" onclick="viaNow('${creatorName}','${memosLink}')">${new Date(createdTs * 1000 - 5 ).toLocaleString()}</div></div></div>${itemOption}</div>${neodbDom+itemContent}</div></div>`;
+    result += `<div class="${memosMode == "MEMOSHOME" && oneDayTag !== null && i == 0 ? oneDayClass : ''} memo-${memosId} d-flex animate__animated mb-3"><div class="card-item flex-fill p-3"><div class="item-header d-flex mb-3"><div class="d-flex flex-fill"><div onclick="getUserMemos('${link}', '${creatorId}','${creatorName}','${avatar}')" class="item-avatar mr-2" style="background-image:url(${avatar})"></div><div class="item-sub d-flex flex-column p-1"><div class="item-creator"><a href="${website}" target="_blank">${creatorName}</a></div><div class="item-mate mt-2 text-xs" onclick="viaNow('${creatorName}','${memosLink}')">${new Date(createdTs * 1000 - 5 ).toLocaleString()}</div></div></div>${itemOption}</div>${neodbDom+itemContent}</div></div>`;
   } // end for
   
   memoDom.insertAdjacentHTML('beforeend', result);
@@ -745,14 +772,20 @@ function goBbs(){
 
 goHomeBtn.addEventListener("click", function () {
   window.localStorage && window.localStorage.setItem("memos-mode",  "MEMOSHOME");
+  let tagnowHas = document.querySelector(".memos-tagnow")
+  if(tagnowHas) tagnowHas.remove();
   goHome();
 });
 goBbsBtn.addEventListener("click", function () {
   window.localStorage && window.localStorage.setItem("memos-mode",  "MEMOSBBS");
+  let tagnowHas = document.querySelector(".memos-tagnow")
+  if(tagnowHas) tagnowHas.remove();
   goBbs()
 });
 randomUserBtn.addEventListener("click", function () {
   window.localStorage && window.localStorage.setItem("memos-mode",  "RANDUSER");
+  let tagnowHas = document.querySelector(".memos-tagnow")
+  if(tagnowHas) tagnowHas.remove();
   goRandUser()
 });
 //随机个人
@@ -806,14 +839,18 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
       memosAccess = 1;
     };
     let userMemoUrl;
-    if(tag){
+    if(tag && (random == null || random == "" )){
       userMemoUrl = `${link}/api/v1/memo?creatorId=${id}&tag=${tag}&rowStatus=NORMAL&limit=50`;
     }else if(search){
       userMemoUrl = `${link}/api/v1/memo?creatorId=${id}&content=${search}&rowStatus=NORMAL&limit=${limit}`;
     }else if(mode == "NOPUBLIC"){
       userMemoUrl = `${link}/api/v1/memo`;
     }else if(random){
-      userMemoUrl = `${link}/api/v1/memo?&limit=1&offset=${random}`;
+      if(tag){
+        userMemoUrl = `${link}/api/v1/memo?tag=${tag}&limit=1&offset=${random}`;
+      }else{
+        userMemoUrl = `${link}/api/v1/memo?&limit=1&offset=${random}`;
+      }
     }else{
       userMemoUrl = `${link}/api/v1/memo?creatorId=${id}&rowStatus=NORMAL&limit=50`;
     }
@@ -828,39 +865,62 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
             },
             cache: 'no-store',
         });
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        let data = await response.json();
-        data.forEach(item => {
-          item.avatar = memosMeAvatarUrl
-          item.link = memosPath
-          item.twikoo = memosMeTwikoo
-          item.artalk = memosMeArtalk
-          item.artSite = `${memosMeArtalkSite}`
-        });
-        if (mode == "NOPUBLIC") {
-          memosCount = data.length;
-          window.localStorage && window.localStorage.setItem("memos-response-count", memosCount);
-          data = data.filter((item) => item.visibility !== "PUBLIC");
-        }
-        memoData = data.flatMap(result => result);
-        memoList.forEach(item => {
-          memoCreatorMap[item.creatorName] = item;
-        });
-        memoData = memoData.map(item => {
-          let data = memoCreatorMap[item.creatorName];
-          return {...item, ...data};
-        });
-        if (mode !== "NOPUBLIC") {
-          memoData = await this.getMemoCount(memoData);
-        }
-        memoDom.innerHTML = "";
-        this.updateData(memoData);
-        if(!random && memoData.length >= 8 ){
-          setTimeout(function() {
-            loadBtn.classList.remove('d-none');
-          }, 1000);
+        if (response.ok) {
+          let data = await response.json();
+          let oneDayTag = window.localStorage && window.localStorage.getItem("memos-oneday-tag");
+          let oneDayTagCount = window.localStorage && window.localStorage.getItem("memos-oneday-count");
+          if( oneDayTag !== null && oneDayTagCount !== null){
+            let randomOneNum = Math.floor(Math.random() * oneDayTagCount)
+            let oneDayUrl = `${memosPath}/api/v1/memo?tag=${oneDayTag}&limit=1&offset=${randomOneNum}`
+            //console.log(oneDayUrl)
+            try {
+              let responseOne = await fetch(oneDayUrl,{
+                headers: {
+                  'Authorization': `Bearer ${memosOpenId}`,
+                  'Content-Type': 'application/json',
+                  'Cache-Control': 'no-cache',
+                },
+                cache: 'no-store',
+              });
+              if (!responseOne.ok) {
+                throw new Error(`Request failed oneDay`);
+              }
+              dataone = await responseOne.json();
+              data.splice(0, 0, ...dataone);
+            } catch (error) {
+              console.error(error);
+            }
+          }
+          data.forEach(item => {
+            item.avatar = memosMeAvatarUrl
+            item.link = memosPath
+            item.twikoo = memosMeTwikoo
+            item.artalk = memosMeArtalk
+            item.artSite = `${memosMeArtalkSite}`
+          });
+          if (mode == "NOPUBLIC") {
+            memosCount = data.length;
+            window.localStorage && window.localStorage.setItem("memos-response-count",  memosCount);
+            data = data.filter((item) => item.visibility !== "PUBLIC");
+          }
+          memoData = data.flatMap(result => result);
+          memoList.forEach(item => {
+            memoCreatorMap[item.creatorName] = item;
+          });
+          memoData = memoData.map(item => {
+            let data = memoCreatorMap[item.creatorName];
+            return {...item, ...data};
+          });
+          if (mode !== "NOPUBLIC") {
+            memoData = await this.getMemoCount(memoData);
+          }
+          memoDom.innerHTML = "";
+          this.updateData(memoData);
+          if(!random && memoData.length >= 8 ){
+            setTimeout(function() {
+              loadBtn.classList.remove('d-none');
+            }, 1000);
+          }
         }
       } catch (error) {
         console.error(error);
@@ -1307,10 +1367,17 @@ function getEditIcon() {
   });
   
   randomBtn.addEventListener("click", async function () {
-    memosCount = window.localStorage && window.localStorage.getItem("memos-response-count");
-    if(!memosCount){
+    let memosAllCount = window.localStorage && window.localStorage.getItem("memos-response-count");
+    let nowTag,userMemoUrl;
+    nowTagText = document.querySelector(".memos-tagnow-name") || ''
+    if(nowTagText){
+      nowTag = nowTagText.textContent;
+      userMemoUrl= `${nowLink}/api/v1/memo?tag=${nowTag}`
+    }else{
+      userMemoUrl = `${nowLink}/api/v1/memo`
+    }
+    if(!memosAllCount || nowTagText){
       try {
-        let userMemoUrl = `${nowLink}/api/v1/memo`
         let response = await fetch(userMemoUrl,{
             headers: {
               'Authorization': `Bearer ${memosOpenId}`,
@@ -1323,18 +1390,58 @@ function getEditIcon() {
           throw new Error(response.statusText);
         }
         let data = await response.json();
-        memosCount = data.length - 1;
-        window.localStorage && window.localStorage.setItem("memos-response-count", memosCount);
-        let randomNum = random(0,memosCount);
-        getUserMemos(nowLink,nowId,nowName,nowAvatar,"","","",randomNum)
+        memosAllCount = data.length - 1;
+        if(!nowTag){
+          window.localStorage && window.localStorage.setItem("memos-response-count",memosAllCount);
+        }
+        let randomNum = random(0,memosAllCount);
+        getUserMemos(nowLink,nowId,nowName,nowAvatar,nowTag,"","",randomNum)
       } catch (error) {
         console.error(error);
       }
+      if(nowTagText){
+        oneDayBtn.classList.remove("d-none")
+      }
     }else{
-      let randomNum = random(0,memosCount);
-      getUserMemos(nowLink,nowId,nowName,nowAvatar,"","","",randomNum)
+        let randomNum = random(0,memosAllCount);
+        getUserMemos(nowLink,nowId,nowName,nowAvatar,nowTag,"","",randomNum)
     }
   });
+
+  //开启回忆一条
+  oneDayBtn.addEventListener("click", async function () {
+    let oneDayNow = window.localStorage && window.localStorage.getItem("memos-oneday-tag");
+    if (oneDayNow == null ) {
+      let nowTag = document.querySelector(".memos-tagnow-name").textContent
+      let nowTagCount;
+      let nowTagUrl= `${nowLink}/api/v1/memo?tag=${nowTag}`
+      try {
+        let response = await fetch(nowTagUrl,{
+            headers: {
+              'Authorization': `Bearer ${memosOpenId}`,
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache',
+            },
+            cache: 'no-store',
+        });
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        let data = await response.json();
+        nowTagCount = data.length - 1;
+        window.localStorage && window.localStorage.setItem("memos-oneday-tag",nowTag);
+        window.localStorage && window.localStorage.setItem("memos-oneday-count",nowTagCount);
+      } catch (error) {
+        console.error(error);
+      }
+      cocoMessage.success("开启「OneDay」")
+    }else{
+      window.localStorage && window.localStorage.removeItem("memos-oneday-tag");
+      window.localStorage && window.localStorage.removeItem("memos-oneday-count");
+      cocoMessage.success("已退出「OneDay」")
+    }
+  });
+  
 
   uploadImageInput.addEventListener('change', () => {
     let filesData = uploadImageInput.files[0];

@@ -459,6 +459,10 @@ blockquote {
 	background-color: var(--dark-background-hover);
 }
 
+.oneday .card-item{box-shadow: rgba(100, 100, 100,0.2) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.1) -3px -3px 6px 1px inset;}
+.dark .oneday .card-item{box-shadow: rgba(0, 0, 0,0.2) 3px 3px 6px 0px inset, rgba(100, 100, 100, 0.1) -3px -3px 6px 1px inset;background-color: var(--dark-background-hover);}
+
+
 .card-item .item-album {
 	position:relative;
 	overflow:hidden;
