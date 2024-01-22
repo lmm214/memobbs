@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	let isLight = getTheme === "light";
   //切换主题
 	if (getTheme !== null) {
-		document.body.classList.toggle("dark-theme",isDark);
+		document.body.classList.toggle("dark-theme","dark",isDark);
 	}
   if (getTheme == null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
 		document.body.classList.add("dark-theme","dark");
