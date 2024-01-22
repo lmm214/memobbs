@@ -460,7 +460,11 @@ blockquote {
 }
 
 .oneday .card-item{box-shadow: rgba(100, 100, 100,0.2) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.1) -3px -3px 6px 1px inset;}
-.dark .oneday .card-item{box-shadow: rgba(0, 0, 0,0.2) 3px 3px 6px 0px inset, rgba(100, 100, 100, 0.1) -3px -3px 6px 1px inset;background-color: var(--dark-background-hover);}
+.dark .oneday .card-item{box-shadow: rgba(0, 0, 0,0.25) 3px 3px 6px 0px inset, rgba(100, 100, 100, 0.25) -3px -3px 6px 1px inset;background-color: var(--dark-background-hover);}
+
+.oneday .item-header{margin-bottom: 0 !important;}
+.oneday .item-avatar,.oneday .item-creator{display: none;}
+.oneday .item-mate{font-size: .9rem !important;margin-top: 0 !important;}
 
 
 .card-item .item-album {
@@ -673,7 +677,8 @@ buttom.cancel-edit-btn{margin-left:-1rem;}
 	.db-card{margin:0.8rem 1rem;}
 	.db-card-comment{display: none;}
 	input.search-memos-input{max-width:56px;}
-	.gohome-memos{margin-right: .5rem !important;}
+	.gohome-memos,.editor-selector{margin-right: .5rem !important;}
+	.edit-memos-btn{padding-right:1rem !important;padding-left:1rem !important;}
 }
 .db-card{box-shadow: none;margin:-10px -1rem 10px;}
 .dark .db-card{background:#252627;}
