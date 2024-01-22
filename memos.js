@@ -209,15 +209,13 @@ var getSelectedValue = window.localStorage && window.localStorage.getItem("memos
 
 document.addEventListener("DOMContentLoaded", () => {
   let getTheme = window.localStorage && window.localStorage.getItem("theme");
-  if (getTheme !== null) {
-		if(getTheme !== "dark"){
+  if (getTheme !== null && getTheme == "dark"){
 			document.body.classList.add("dark-theme","dark");
-		}else{
+	}else{
 			document.body.classList.remove("dark-theme","dark");
-		}
-  }
+	}
   if (getTheme == null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-		document.body.classList.add("dark-theme","dark");
+	  document.body.classList.add("dark-theme","dark");
   }
 });
 
