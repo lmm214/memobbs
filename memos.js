@@ -1440,6 +1440,7 @@ function getEditIcon() {
       window.localStorage && window.localStorage.removeItem("memos-oneday-count");
       cocoMessage.success("已退出「OneDay」")
     }
+    oneDayBtn.classList.add("d-none")
   });
   
 
