@@ -758,3 +758,6 @@ buttom.cancel-edit-btn{margin-left:-1rem;}
 	--at-color-green: #4caf50;
 	--at-color-gradient: linear-gradient(180deg, transparent, rgba(30, 34, 36, 1))
 }
+.forever-item.card-item .item-avatar{
+    cursor: unset;
+}
