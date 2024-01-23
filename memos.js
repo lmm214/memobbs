@@ -1,5 +1,5 @@
 /**
- * memos.js 24.1.22
+ * memos.js 24.1.23
  * https://immmmm.com/
  */
 var memosData = {
@@ -113,7 +113,7 @@ var memosEditorCont = `
             <svg xmlns="http://www.w3.org/2000/svg" width=".9rem" height=".9rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2l4 4l-4 4M2 6h1.9c1.5 0 2.9.9 3.6 2.2M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14l4 4l-4 4"/></g></svg>
           </div>
           <div class="button outline oneday-btn d-none p-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><path d="M16 2v4M8 2v4m-5 4h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></g></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width=".9rem" height=".9rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><path d="M16 2v4M8 2v4m-5 4h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></g></svg>
           </div>
         </div>
         <div class="editor-submit d-flex flex-fill justify-content-end">
@@ -686,6 +686,14 @@ async function getMemos(search) {
   goBbsBtn.classList.remove("noclick")
 }
 
+//标签筛选且输入框为空，自动插入标签
+memosTextarea.addEventListener('focus', function(event) {
+  let nowTag = document.querySelector(".memos-tagnow-name")
+  if(nowTag !== null && memosTextarea.value == ""){
+    memosTextarea.value = "#"+nowTag.textContent+" ";
+  }
+});
+
 //搜索 Memo
 searchBtn.addEventListener("click", function () {
   if(searchInput.classList.contains("d-none")){
@@ -871,7 +879,7 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
           let oneDayTagCount = window.localStorage && window.localStorage.getItem("memos-oneday-count");
           if( oneDayTag !== null && oneDayTagCount !== null){
             let randomOneNum = Math.floor(Math.random() * oneDayTagCount)
-            let oneDayUrl = `${link}/api/v1/memo?tag=${oneDayTag}&limit=1&offset=${randomOneNum}`
+            let oneDayUrl = `${memosPath}/api/v1/memo?tag=${oneDayTag}&limit=1&offset=${randomOneNum}`
             //console.log(oneDayUrl)
             try {
               let responseOne = await fetch(oneDayUrl,{
