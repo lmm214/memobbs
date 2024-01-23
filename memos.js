@@ -1,5 +1,5 @@
 /**
- * memos.js 24.1.23
+ * memos.js 24.1.22
  * https://immmmm.com/
  */
 var memosData = {
@@ -45,6 +45,7 @@ var userNow = `
     <span class="search-memos-btn button d-md-flex p-2 mr-2">
       <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21l-4.3-4.3"/></g></svg>
     </span>
+    <div class="user-button-span row-fill">
     <span class="memos-theme-toggle button d-md-flex p-2 mr-2">
       <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8a2.83 2.83 0 0 0 4 4a4 4 0 1 1-4-4m0-6v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4l1.4 1.4M2 12h2m16 0h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg>
     </span>
@@ -60,6 +61,7 @@ var userNow = `
     <span class="gohome-memos button d-md-flex p-2 mr-3">
       <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m3 9l9-7l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></g></svg>
     </span>
+    </div>
   </div>
 </div>`
 memosDom.insertAdjacentHTML('beforebegin', userNow);
@@ -157,6 +159,7 @@ var linkBtn = document.querySelector(".link-btn");
 var linkPicBtn = document.querySelector(".linkpic-btn");
 var randomBtn = document.querySelector(".random-btn");
 var oneDayBtn = document.querySelector(".oneday-btn");
+var userButton = document.querySelector('.user-button-span');
 var privateBtn = document.querySelector(".private-btn");
 var switchUserBtn = document.querySelector(".switchUser-btn");
 var loadEditorBtn = document.querySelector(".call-memos-editor");
@@ -697,11 +700,13 @@ memosTextarea.addEventListener('focus', function(event) {
 //搜索 Memo
 searchBtn.addEventListener("click", function () {
   if(searchInput.classList.contains("d-none")){
+    userButton.classList.add("d-none")
     searchInput.classList.remove("d-none")
     searchInput.focus();
   }else{
     searchInput.classList.add("animate__fadeOutRight")
     setTimeout(function() {
+      userButton.classList.remove("d-none")
       searchInput.classList.add("d-none")
       searchInput.classList.remove("animate__fadeOutRight")
     }, 500);
