@@ -49,6 +49,9 @@ var userNow = `
     <span class="memos-theme-toggle button d-md-flex p-2 mr-2">
       <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8a2.83 2.83 0 0 0 4 4a4 4 0 1 1-4-4m0-6v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4l1.4 1.4M2 12h2m16 0h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg>
     </span>
+    <span class="forever-blog-feeds button d-md-flex p-2 mr-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10 10v.2A3 3 0 0 1 8.9 16v0H5v0h0a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0m-3 6v6m6-3v3"/><path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5"/></g></svg>
+    </span>
     <span class="userlist-memos button d-md-flex p-2 mr-2">
       <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 19a6 6 0 0 0-12 0"/><circle cx="8" cy="9" r="4"/><path d="M22 19a6 6 0 0 0-6-6a4 4 0 1 0 0-8"/></g></svg>
     </span>
@@ -149,6 +152,7 @@ var memosEditorCont = `
 memosDom.insertAdjacentHTML('afterbegin',memosEditorCont);
 
 var themeTogglebtn = document.querySelector(".memos-theme-toggle");
+var foreverFeedsBtn = document.querySelector(".forever-blog-feeds");
 var memosEditorInner = document.querySelector(".memos-editor-inner"); 
 var memosEditorOption = document.querySelector(".memos-editor-option");
 var memosRadomCont = document.querySelector(".memos-random");
@@ -688,6 +692,37 @@ async function getMemos(search) {
   //}, 800);
   goBbsBtn.classList.remove("noclick")
 }
+
+foreverFeedsBtn.addEventListener('click', function(event) {
+  loadBtn.classList.add('d-none');
+  memoDom.innerHTML = skeleton;
+  usernowBtnDom.forEach((item) => {item.classList.remove('current');})
+  foreverFeedsBtn.classList.add("current")
+  let fetchUrl = "https://www.foreverblog.cn/api/v1/blog/feeds?page=1";"/foreverfeeds.json"
+  fetch(fetchUrl).then(res => res.json()).then(resdata =>{
+    let foreverData = resdata.data.data
+    var foreverArticle = '';
+    for (var i = 0;i<foreverData.length;i++){
+      var item = foreverData[i];
+      foreverArticle +=`
+      <div class="card-item forever-item flex-fill p-3 mb-3 animate__animated animate__fadeIn ">
+        <div class="d-flex flex-fill">
+          <div class="item-avatar mr-2" style="background-image:url(https://gravatar.memobbs.app/avatar/${item.email}?s=80)"></div>
+          <div class="item-sub d-flex flex-column p-1">
+            <div class="item-creator"><a href="${item.link}" target="_blank" rel="noopener nofollow" >${item.title}</a></div>
+            <div class="item-mate mt-2 text-xs">${item.created_at}</div>
+          </div>
+        </div>
+      </div>
+      `;
+    }
+    memoDom.innerHTML = foreverArticle;
+    //相对时间
+    window.Lately && Lately.init({
+      target: '.item-mate'
+    });
+  })
+});
 
 //标签筛选且输入框为空，自动插入标签
 memosTextarea.addEventListener('focus', function(event) {
