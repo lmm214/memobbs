@@ -49,17 +49,17 @@ var userNow = `
     <span class="memos-theme-toggle button d-md-flex p-2 mr-2">
       <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8a2.83 2.83 0 0 0 4 4a4 4 0 1 1-4-4m0-6v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4l1.4 1.4M2 12h2m16 0h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg>
     </span>
-    <span class="forever-blog-feeds button d-md-flex p-2 mr-2">
+    <span class="my-blog-feeds button d-md-flex p-2 mr-2">
       <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10 10v.2A3 3 0 0 1 8.9 16v0H5v0h0a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0m-3 6v6m6-3v3"/><path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5"/></g></svg>
     </span>
     <span class="userlist-memos button d-md-flex p-2 mr-2">
-      <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 19a6 6 0 0 0-12 0"/><circle cx="8" cy="9" r="4"/><path d="M22 19a6 6 0 0 0-6-6a4 4 0 1 0 0-8"/></g></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87m-3-12a4 4 0 0 1 0 7.75"/></g></svg>
     </span>
     <span class="randomuser-memos button d-md-flex p-2 mr-2">
-      <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="16" height="16" x="4" y="3" rx="2"/><path d="M4 11h16m-8-8v8m-4 8l-2 3m12 0l-2-3m0-4"/></g></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0m16 4v-2.38c0-2.12 1.03-3.12 1-5.62c-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0m-4-3h4M4 13h4"/></svg>
     </span>
     <span class="gobbs-memos button d-md-flex p-2 mr-2">
-      <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M4.9 16.1C1 12.2 1 5.8 4.9 1.9m2.9 2.8a6.14 6.14 0 0 0-.8 7.5"/><circle cx="12" cy="9" r="2"/><path d="M16.2 4.8c2 2 2.26 5.11.8 7.47M19.1 1.9a9.96 9.96 0 0 1 0 14.1m-9.6 2h5M8 22l4-11l4 11"/></g></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.8 20v-4.1l1.9.2a2.3 2.3 0 0 0 2.164-2.1V8.3A5.37 5.37 0 0 0 2 8.25c0 2.8.656 3.054 1 4.55a5.77 5.77 0 0 1 .029 2.758L2 20m17.8-2.2a7.5 7.5 0 0 0 .003-10.603M17 15a3.5 3.5 0 0 0-.025-4.975"/></svg>
     </span> 
     <span class="gohome-memos button d-md-flex p-2 mr-3">
       <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m3 9l9-7l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></g></svg>
@@ -152,7 +152,7 @@ var memosEditorCont = `
 memosDom.insertAdjacentHTML('afterbegin',memosEditorCont);
 
 var themeTogglebtn = document.querySelector(".memos-theme-toggle");
-var foreverFeedsBtn = document.querySelector(".forever-blog-feeds");
+var myFeedsBtn = document.querySelector(".my-blog-feeds");
 var memosEditorInner = document.querySelector(".memos-editor-inner"); 
 var memosEditorOption = document.querySelector(".memos-editor-option");
 var memosRadomCont = document.querySelector(".memos-random");
@@ -693,30 +693,32 @@ async function getMemos(search) {
   goBbsBtn.classList.remove("noclick")
 }
 
-foreverFeedsBtn.addEventListener('click', function(event) {
+myFeedsBtn.addEventListener('click', function(event) {
   loadBtn.classList.add('d-none');
   memoDom.innerHTML = skeleton;
   usernowBtnDom.forEach((item) => {item.classList.remove('current');})
-  foreverFeedsBtn.classList.add("current")
-  let fetchUrl = "https://www.foreverblog.cn/api/v1/blog/feeds?page=1";"/foreverfeeds.json"
+  myFeedsBtn.classList.add("current")
+  let fetchUrl = "https://cf.edui.fun/all?rule=created&end=20"
   fetch(fetchUrl).then(res => res.json()).then(resdata =>{
-    let foreverData = resdata.data.data
-    var foreverArticle = '';
-    for (var i = 0;i<foreverData.length;i++){
-      var item = foreverData[i];
-      foreverArticle +=`
-      <div class="card-item forever-item flex-fill p-3 mb-3 animate__animated animate__fadeIn ">
+    console.log(resdata)
+    let myFeedData = resdata.article_data
+    var myFeedArticle = '';
+    for (var i = 0;i<myFeedData.length;i++){
+      var item = myFeedData[i];
+      myFeedArticle +=`
+      <div class="card-item flex-fill p-3">
         <div class="d-flex flex-fill">
-          <div class="item-avatar mr-2" style="background-image:url(https://gravatar.memobbs.app/avatar/${item.email}?s=80)"></div>
+          <div class="item-avatar mr-2" style="background-image:url(${item.avatar})"></div>
           <div class="item-sub d-flex flex-column p-1">
             <div class="item-creator"><a href="${item.link}" target="_blank" rel="noopener nofollow" >${item.title}</a></div>
-            <div class="item-mate mt-2 text-xs">${item.created_at}</div>
+            <span class="myfeeds-floor">${item.floor}</span>
+            <div class="item-mate mt-2 text-xs">${item.updated}</div>
           </div>
         </div>
       </div>
       `;
     }
-    memoDom.innerHTML = foreverArticle;
+    memoDom.innerHTML = `<div class="myfeeds">${myFeedArticle}</div>`;
     //相对时间
     window.Lately && Lately.init({
       target: '.item-mate'
@@ -738,7 +740,40 @@ searchBtn.addEventListener("click", function () {
     userButton.classList.add("d-none")
     searchInput.classList.remove("d-none")
     searchInput.focus();
-  }else{
+  }else if(searchInput.value !== ""){
+    searchNow()
+  }
+  searchInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      searchNow()
+    }
+  });
+});
+
+function searchNow(){
+  let tagnowHas = document.querySelector(".memos-tagnow")
+  if(tagnowHas) tagnowHas.remove();
+  const serchText = searchInput.value;
+  let usernowName = document.querySelector(".user-now-name").innerHTML;
+  if(serchText !== "" && serchText != null){
+    let serchDom = `
+      <div class="memos-tagnow row p-2 mb-2"">
+        <div class="memos-tagnow-title mr-3">当前搜索:</div>
+        <div class="memos-tagnow-name card-item pr-2 pl-2" onclick="reloadUser('search')">${serchText}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-auto ml-1 opacity-40"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></div>
+      </div>`
+    memosDom.insertAdjacentHTML('beforebegin', serchDom);
+    if(usernowName == ""){
+      getMemos(serchText)
+    }else{
+      let userNameIndex = memoList.findIndex(item => (item.creatorName == usernowName));
+      if(userNameIndex == -1){
+        getUserMemos(nowLink,nowId,nowName,nowAvatar,"",serchText)
+      }else{
+        let userNowData = memoList[userNameIndex]
+        getUserMemos(userNowData.link,userNowData.creatorId,userNowData.creatorName,userNowData.avatar,"",serchText)
+      }
+    }
+    searchInput.value = ''
     searchInput.classList.add("animate__fadeOutRight")
     setTimeout(function() {
       userButton.classList.remove("d-none")
@@ -746,35 +781,7 @@ searchBtn.addEventListener("click", function () {
       searchInput.classList.remove("animate__fadeOutRight")
     }, 500);
   }
-  searchInput.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-      let tagnowHas = document.querySelector(".memos-tagnow")
-      if(tagnowHas) tagnowHas.remove();
-      const serchText = searchInput.value;
-      let usernowName = document.querySelector(".user-now-name").innerHTML;
-      if(serchText !== "" && serchText != null){
-        let serchDom = `
-          <div class="memos-tagnow row p-2 mb-2"">
-            <div class="memos-tagnow-title mr-3">当前搜索:</div>
-            <div class="memos-tagnow-name card-item pr-2 pl-2" onclick="reloadUser('search')">${serchText}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-auto ml-1 opacity-40"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></div>
-          </div>`
-        memosDom.insertAdjacentHTML('beforebegin', serchDom);
-        if(usernowName == ""){
-          getMemos(serchText)
-        }else{
-          let userNameIndex = memoList.findIndex(item => (item.creatorName == usernowName));
-          if(userNameIndex == -1){
-            getUserMemos(nowLink,nowId,nowName,nowAvatar,"",serchText)
-          }else{
-            let userNowData = memoList[userNameIndex]
-            getUserMemos(userNowData.link,userNowData.creatorId,userNowData.creatorName,userNowData.avatar,"",serchText)
-          }
-        }
-        searchInput.value = ''
-      }
-    }
-  });
-});
+}
 
 //显示订阅列表
 userlistBtn.addEventListener("click", function () {

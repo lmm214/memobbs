@@ -758,6 +758,20 @@ buttom.cancel-edit-btn{margin-left:-1rem;}
 	--at-color-green: #4caf50;
 	--at-color-gradient: linear-gradient(180deg, transparent, rgba(30, 34, 36, 1))
 }
-.forever-item.card-item .item-avatar{
-    cursor: unset;
+.myfeeds{
+	display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(auto-fill,minmax(400px,1fr));
 }
+.myfeeds .myfeeds-floor{
+	position: absolute;
+    top: 0;
+    right: 0.5rem;
+    font-style: italic;
+    font-size: 3rem;
+    line-height: 1.5rem;
+    z-index: 1;
+    font-weight: 400;
+	color: var(--light-color-hover)
+}
+.dark .myfeeds .myfeeds-floor{color: var(--dark-color-hover)}
