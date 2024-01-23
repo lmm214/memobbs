@@ -468,6 +468,7 @@ function memoFollow(mode) {
 // 插入 html 
 async function updateHtml(data) {
   let oneDayClass = "oneday";
+  let tagnowHas = document.querySelector(".memos-tagnow")
   let memosMode = window.localStorage && window.localStorage.getItem("memos-mode");
   let oneDayTag = window.localStorage && window.localStorage.getItem("memos-oneday-tag");
   let result = '',itemOption = '',itemContent = '';
@@ -593,7 +594,7 @@ async function updateHtml(data) {
       itemContent += `<div class="d-flex flex-fill justify-content-end"></div></div>`;
     }
     itemContent += `</div></div></div>`
-    result += `<div class="${memosMode == "MEMOSHOME" && oneDayTag !== null && i == 0 ? oneDayClass : ''} memo-${memosId} d-flex animate__animated mb-3"><div class="card-item flex-fill p-3"><div class="item-header d-flex mb-3"><div class="d-flex flex-fill"><div onclick="getUserMemos('${link}', '${creatorId}','${creatorName}','${avatar}')" class="item-avatar mr-2" style="background-image:url(${avatar})"></div><div class="item-sub d-flex flex-column p-1"><div class="item-creator"><a href="${website}" target="_blank">${creatorName}</a></div><div class="item-mate mt-2 text-xs" onclick="viaNow('${creatorName}','${memosLink}')">${new Date(createdTs * 1000 - 5 ).toLocaleString()}</div></div></div>${itemOption}</div>${neodbDom+itemContent}</div></div>`;
+    result += `<div class="${memosMode == "MEMOSHOME" && tagnowHas == null &&oneDayTag !== null && i == 0 ? oneDayClass : ''} memo-${memosId} d-flex animate__animated mb-3"><div class="card-item flex-fill p-3"><div class="item-header d-flex mb-3"><div class="d-flex flex-fill"><div onclick="getUserMemos('${link}', '${creatorId}','${creatorName}','${avatar}')" class="item-avatar mr-2" style="background-image:url(${avatar})"></div><div class="item-sub d-flex flex-column p-1"><div class="item-creator"><a href="${website}" target="_blank">${creatorName}</a></div><div class="item-mate mt-2 text-xs" onclick="viaNow('${creatorName}','${memosLink}')">${new Date(createdTs * 1000 - 5 ).toLocaleString()}</div></div></div>${itemOption}</div>${neodbDom+itemContent}</div></div>`;
   } // end for
   
   memoDom.insertAdjacentHTML('beforeend', result);
@@ -740,22 +741,28 @@ searchBtn.addEventListener("click", function () {
     userButton.classList.add("d-none")
     searchInput.classList.remove("d-none")
     searchInput.focus();
+  }else if(!searchInput.classList.contains("d-none") && searchInput.value == ""){
+    searchInput.classList.add("animate__fadeOutRight")
+    setTimeout(function() {
+      userButton.classList.remove("d-none")
+      searchInput.classList.add("d-none")
+      searchInput.classList.remove("animate__fadeOutRight")
+    }, 500);
   }else if(searchInput.value !== ""){
-    searchNow()
+    searchNow(searchInput.value)
   }
   searchInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
-      searchNow()
+      searchNow(searchInput.value)
     }
   });
 });
 
-function searchNow(){
-  let tagnowHas = document.querySelector(".memos-tagnow")
-  if(tagnowHas) tagnowHas.remove();
-  const serchText = searchInput.value;
-  let usernowName = document.querySelector(".user-now-name").innerHTML;
-  if(serchText !== "" && serchText != null){
+function searchNow(serchText){
+  if(serchText !== ""){
+    let tagnowHas = document.querySelector(".memos-tagnow")
+    if(tagnowHas) tagnowHas.remove();
+    let usernowName = document.querySelector(".user-now-name").innerHTML;
     let serchDom = `
       <div class="memos-tagnow row p-2 mb-2"">
         <div class="memos-tagnow-title mr-3">当前搜索:</div>
@@ -774,12 +781,13 @@ function searchNow(){
       }
     }
     searchInput.value = ''
+
     searchInput.classList.add("animate__fadeOutRight")
-    setTimeout(function() {
-      userButton.classList.remove("d-none")
-      searchInput.classList.add("d-none")
-      searchInput.classList.remove("animate__fadeOutRight")
-    }, 500);
+  setTimeout(function() {
+    userButton.classList.remove("d-none")
+    searchInput.classList.add("d-none")
+    searchInput.classList.remove("animate__fadeOutRight")
+  }, 500);
   }
 }
 
@@ -924,7 +932,7 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
           let data = await response.json();
           let oneDayTag = window.localStorage && window.localStorage.getItem("memos-oneday-tag");
           let oneDayTagCount = window.localStorage && window.localStorage.getItem("memos-oneday-count");
-          if( oneDayTag !== null && oneDayTagCount !== null){
+          if( oneDayTag !== null && oneDayTagCount !== null && search == ""){
             let randomOneNum = Math.floor(Math.random() * oneDayTagCount)
             let oneDayUrl = `${memosPath}/api/v1/memo?tag=${oneDayTag}&limit=1&offset=${randomOneNum}`
             //console.log(oneDayUrl)
