@@ -1313,12 +1313,7 @@ function getEditIcon() {
       } else if (keyCode === 13 && selectedTagIndex !== -1) {
         event.preventDefault();
         let tagName = matchingTags[selectedTagIndex].replace(/[#]/,'') + " "
-        insertValue(tagName);
-        let bracketIndex = memosTextarea.value.indexOf(tagName);
-        if (bracketIndex !== -1) {
-          memosTextarea.selectionStart = bracketIndex + tagName.length;
-          memosTextarea.selectionEnd = bracketIndex + tagName.length;
-        }
+        insertValue(tagName,"",0)
         memosTagList.querySelector('.memos-tag').classList.remove('selected');
         memosTagList.classList.add('d-none');
         selectedTagIndex = -1;
@@ -1353,54 +1348,21 @@ function getEditIcon() {
   //});
 
   codeoneBtn.addEventListener("click", function () {
-    let memoCode = ' `` ';
-    insertValue(memoCode);
-    let bracketIndex = memosTextarea.value.indexOf(" `` ");
-    if (bracketIndex !== -1) {
-      memosTextarea.selectionStart = bracketIndex + 2;
-      memosTextarea.selectionEnd = bracketIndex + 2;
-    }
+    insertValue(" `` ","`",2)
   });
 
   codeBtn.addEventListener("click", function () {
-    let memoCode = '```\n\n```';
-    insertValue(memoCode);
-    let bracketIndex = memosTextarea.value.indexOf("\n\n");
-    if (bracketIndex !== -1) {
-      memosTextarea.selectionStart = bracketIndex + 1;
-      memosTextarea.selectionEnd = bracketIndex + 1;
-    }
+    let memoCode = "\n```\n\n```\n";
+    insertValue(memoCode,"",0);
   });
 
   linkBtn.addEventListener("click", function () {
-    let memoLink = ' []() ';
-    insertValue(memoLink);
-    let bracketIndex = memosTextarea.value.indexOf("[]()");
-    if (bracketIndex !== -1) {
-      memosTextarea.selectionStart = bracketIndex + 3;
-      memosTextarea.selectionEnd = bracketIndex + 3;
-    }
+    insertValue(" []() ","[",2)
   });
 
   linkPicBtn.addEventListener("click", function () {
-    let memoLink = ' ![]() ';
-    insertValue(memoLink);
-    let bracketIndex = memosTextarea.value.indexOf("![]()");
-    if (bracketIndex !== -1) {
-      memosTextarea.selectionStart = bracketIndex + 4;
-      memosTextarea.selectionEnd = bracketIndex + 4;
-    }
+    insertValue(" ![]() ","!",2)
   });
-
-  function insertValue(t) {
-    let textLength = t.length;
-    memosTextarea.value += t;
-    memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
-    // 更新光标位置
-    memosTextarea.selectionStart = textLength;
-    memosTextarea.selectionEnd = textLength;
-    memosTextarea.focus()
-  }
 
   memosVisibilitySelect.addEventListener('change', function() {
     memoNowSelct = window.localStorage && window.localStorage.getItem("memos-visibility-select");
@@ -1650,7 +1612,7 @@ function getEditIcon() {
       }).then(response => {
         let taglist = "";
         response.map((t)=>{
-          taglist += `<div class="imagelist-item d-flex text-xs mt-2 mr-2 px-2" onclick="setMemoTag(this)">#${t}</div>`;
+          taglist += `<div class="memos-tag d-flex text-xs mt-2 mr-2 px-2" onclick="setMemoTag(this)">#${t}</div>`;
         })
         document.querySelector(".memos-tag-list").innerHTML = taglist;
         //cocoMessage.success('准备就绪');
@@ -1705,6 +1667,34 @@ function getEditIcon() {
     } catch (error) {
       cocoMessage.error('出错了，再检查一下吧!');
     }
+  }
+}
+
+function insertValue(text,wrap,back) {
+  memosTextarea.focus();
+  const start = memosTextarea.selectionStart;
+  const end = memosTextarea.selectionEnd;
+  const selectedText = memosTextarea.value.substring(start, end);
+  if(selectedText == ""){
+    memosTextarea.value = memosTextarea.value.substring(0, start) + text + memosTextarea.value.substring(end);
+    memosTextarea.selectionStart = start + text.length - back;
+    memosTextarea.selectionEnd = start + text.length - back;
+  }else{
+    let wrapSelText;
+    if( wrap == "`" ){
+      wrapSelText = " `" + selectedText + "` ";
+      back = 0;
+    }
+    if( wrap == "[" ){
+      wrapSelText = " [" + selectedText + "]() ";
+    }
+    if( wrap == "!" ){
+      wrapSelText = " ![" + selectedText + "]() ";
+    }
+    const newText = memosTextarea.value.substring(0, start) + wrapSelText + memosTextarea.value.substring(end);
+    memosTextarea.value = newText;
+    memosTextarea.selectionStart = start + wrapSelText.length - back;
+    memosTextarea.selectionEnd = end + wrapSelText.length - back - selectedText.length;
   }
 }
 

@@ -594,7 +594,7 @@ blockquote {
 	align-items: center;
 }
 
-.card-item .item-tag, .list-item .item-tag, .memos-tag {
+.card-item .item-tag, .list-item .item-tag, .memos-tag{
 	white-space: nowrap;
 	border-radius: .33rem;
 	background-color: var(--light-color-hover);
