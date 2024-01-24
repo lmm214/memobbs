@@ -549,6 +549,7 @@ async function updateHtml(data) {
     }
     
     //解析内置资源文件
+    console.log(memo)
     if (memo.resourceList && memo.resourceList.length > 0) {
       let resourceList = memo.resourceList;
       let imgUrl = '',resUrl = '',resImgLength = 0;
@@ -566,8 +567,10 @@ async function updateHtml(data) {
           imgUrl += `<div class="memo-resource w-100"><img class="lozad" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="${imgLink}"/></div>`;
           resImgLength = resImgLength + 1
         }
-        if (restype !== 'image') {
-          resUrl += `<a target="_blank" rel="noreferrer" href="${imgLink}">${resourceList[j].filename}</a>`;
+        if (restype == 'video') {
+          resUrl += `<video style="width:100%;" crossorigin="anonymous" src="${imgLink}" controls=""></video>`
+        }else{
+          resUrl += `<a class="memos-tag p-1" target="_blank" rel="noreferrer" href="${imgLink}">${resourceList[j].filename}</a>`;
         }
       }
       if (imgUrl) {
