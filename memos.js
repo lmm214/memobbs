@@ -570,7 +570,7 @@ async function updateHtml(data) {
         if (restype == 'video') {
           resUrl += `<video style="width:100%;" crossorigin="anonymous" src="${imgLink}" controls=""></video>`
         }
-        if (restype !== 'video' || restype !== 'image') {
+        if (restype !== 'video' && restype !== 'image') {
           resUrl += `<a class="memos-tag p-1" target="_blank" rel="noreferrer" href="${imgLink}">${resourceList[j].filename}</a>`;
         }
       }
