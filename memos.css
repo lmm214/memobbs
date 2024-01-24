@@ -761,7 +761,7 @@ buttom.cancel-edit-btn{margin-left:-1rem;}
 .myfeeds{
     display: grid;
     grid-gap: 1rem;
-    grid-template-columns: repeat(auto-fill,minmax(375px,1fr));
+    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
 }
 .myfeeds .myfeeds-floor{
     position: absolute;
