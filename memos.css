@@ -759,12 +759,12 @@ buttom.cancel-edit-btn{margin-left:-1rem;}
 	--at-color-gradient: linear-gradient(180deg, transparent, rgba(30, 34, 36, 1))
 }
 .myfeeds{
-	display: grid;
+    display: grid;
     grid-gap: 1rem;
-    grid-template-columns: repeat(auto-fill,minmax(400px,1fr));
+    grid-template-columns: repeat(auto-fill,minmax(375px,1fr));
 }
 .myfeeds .myfeeds-floor{
-	position: absolute;
+    position: absolute;
     top: 0;
     right: 0.5rem;
     font-style: italic;
