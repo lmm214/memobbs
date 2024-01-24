@@ -687,7 +687,7 @@ buttom.cancel-edit-btn{margin-left:-1rem;}
 .user-now .row-fill{display:flex;align-items:center;margin-left:auto;}
 .user-now .row-fill .iconfont,.load-memos-editor .iconfont{font-size: 1.25rem;}
 .user-now.row{margin-right:0;margin-left:0;}
-.user-now.card-item{overflow:unset;height:3.5rem;}
+.user-now.card-item{overflow:hidden;height:3.5rem;}
 .user-now.card-item .item-avatar{border-radius:unset;background-color: transparent;width:3.5rem;height:3.5rem;cursor: pointer;}
 .user-now.card-item .item-avatar img{border-radius:8px;display: inline-block;max-width: 100%;}
 .user-now-name{height:3.5rem;line-height:3.5rem;}
