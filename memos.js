@@ -1860,7 +1860,11 @@ BackTop.onclick=function(){
 	document.body.scrollIntoView({behavior: 'smooth'})
 };
 
-cfAiBtn.addEventListener("click", async function () {
+cfAiBtn.addEventListener("click", function (){
+  cfAiBtnLoad()
+})
+
+async function cfAiBtnLoad() {
   let cfwkAiUrl = window.localStorage && window.localStorage.getItem("memos-cfwkai-url")
   if(cfwkAiUrl != null && cfwkAiUrl !== ""){
     cfAiBtn.classList.add("d-none","noclick")
@@ -1872,22 +1876,25 @@ cfAiBtn.addEventListener("click", async function () {
       uuid += chars[charIndex];
       if (i === 7 || i === 11 || i === 15 || i === 19) {uuid += '-';}
     }
-    let textOld = memosTextarea.value
-    let input = encodeURIComponent(memosTextarea.value)
-    let fetchUrl = `${cfwkAiUrl}/${uuid}?q=${input}`
-    let aiResponse = await fetch(fetchUrl).then(res => res.json()).then(resdata =>{
-        return resdata[0].response[resdata[0].response.length - 1].content.response
-    })
-    //console.log(aiResponse)
-    if (aiResponse.length > 0) {
-      cfAiBtn.classList.remove("d-none","noclick")
-      cfAiLoadBtn.classList.add("d-none")
-      memosTextarea.value = `${textOld}\n----------\n${aiResponse}`
-      memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
+    try{
+      let textOld = memosTextarea.value
+      let input = encodeURIComponent(memosTextarea.value)
+      let fetchUrl = `${cfwkAiUrl}/${uuid}?q=${input}`
+      let aiResponse = await fetch(fetchUrl).then(res => res.json()).then(resdata =>{
+          return resdata[0].response[resdata[0].response.length - 1].content.response
+      })
+      //console.log(aiResponse)
+      if (aiResponse.length > 0) {
+        cfAiBtn.classList.remove("d-none","noclick")
+        cfAiLoadBtn.classList.add("d-none")
+        memosTextarea.value = `${textOld}\n----------\n${aiResponse}`
+        memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
+      }
+    } catch (error) {
+      cocoMessage.error('出错了，再检查一下吧!');
     }
   }
-});
-
+}
 
 /**
  * Lately.min.js 2.5.2
