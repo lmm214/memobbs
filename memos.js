@@ -72,6 +72,7 @@ memosDom.insertAdjacentHTML('beforebegin', userNow);
 var backTop = `<div class="backtop d-none"><svg xmlns="http://www.w3.org/2000/svg" width="1.25rem" height="1.25rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m18 15l-6-6l-6 6"/></svg></div>`
 memosDom.insertAdjacentHTML('afterend', backTop);
 
+let cfwkAiUrl = window.localStorage && window.localStorage.getItem("memos-cfwkai-url")
 var memosEditorCont = `
 <div class="memos-editor animate__animated animate__fadeIn col-12 d-none">
   <div class="memos-editor-body mb-3 p-3">
@@ -104,6 +105,13 @@ var memosEditorCont = `
             <svg xmlns="http://www.w3.org/2000/svg" width="1.35rem" height="1.35rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7m4 2h6m-3-3v6"/><circle cx="9" cy="9" r="2"/><path d="m21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></g></svg>
             <input class="memos-upload-image-input d-none" type="file" accept="image/*">
           </div>
+          ${cfwkAiUrl != null && cfwkAiUrl !== "" ? `
+            <div class="button outline action-btn mr-2 cfworkerai-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2m16 0h2m-7-1v2m-6-2v2"/></g></svg>
+            </div>
+            <div class="button outline action-btn mr-2 cfworkerai-load-btn d-none noclick">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+            </div>` : ""}
         </div>
         <div class="d-flex flex-fill">
           <div class="memos-tag-list d-none mt-2 animate__animated animate__fadeIn"></div>
@@ -146,6 +154,7 @@ var memosEditorCont = `
         <input name="artalk-url" class="memos-artalk-input border-b input-text col-6 py-2" type="text" value="" placeholder="[可选]Artalk 评论网址">
         <input name="artalk-site-name" class="memos-artalksite-input border-b input-text col-6 py-2" type="text" value="" placeholder="[可选] Artalk 站点名称">
         <input name="twikoo-path-url" class="memos-twikoo-input border-b input-text col-6 py-2" type="text" value="" placeholder="[可选]Twikoo 评论网址">
+        <input name="twikoo-path-url" class="cfwkai-url-input border-b input-text col-6 py-2" type="text" value="" placeholder="[可选]Cloudflare AI 网址">
       </div>
       <button class="primary submit-openapi-btn px-5 py-2">保存</button>
     </div>
@@ -164,6 +173,8 @@ var codeoneBtn = document.querySelector(".codeone-btn");
 var codeBtn = document.querySelector(".code-btn");
 var linkBtn = document.querySelector(".link-btn");
 var linkPicBtn = document.querySelector(".linkpic-btn");
+var cfAiBtn = document.querySelector(".cfworkerai-btn");
+var cfAiLoadBtn = document.querySelector(".cfworkerai-load-btn");
 var randomBtn = document.querySelector(".random-btn");
 var oneDayBtn = document.querySelector(".oneday-btn");
 var userButton = document.querySelector('.user-button-span');
@@ -182,6 +193,7 @@ var tokenInput = document.querySelector(".memos-token-input");
 var artalkInput = document.querySelector(".memos-artalk-input");
 var artalkSiteInput = document.querySelector(".memos-artalksite-input");
 var twikooInput = document.querySelector(".memos-twikoo-input");
+var cfwkAiUrlInput = document.querySelector(".cfwkai-url-input");
 var uploadImageInput = document.querySelector(".memos-upload-image-input");
 var memosTextarea = document.querySelector(".memos-editor-textarea");
 var getEditor = window.localStorage && window.localStorage.getItem("memos-editor-display");
@@ -708,7 +720,6 @@ myFeedsBtn.addEventListener('click', function(event) {
   myFeedsBtn.classList.add("current")
   let fetchUrl = "https://cf.edui.fun/all?rule=created&end=20"
   fetch(fetchUrl).then(res => res.json()).then(resdata =>{
-    console.log(resdata)
     let myFeedData = resdata.article_data
     var myFeedArticle = '';
     for (var i = 0;i<myFeedData.length;i++){
@@ -1541,6 +1552,7 @@ function getEditIcon() {
       if(artalkInput.value !== null || artalkInput.value !== '') window.localStorage && window.localStorage.setItem("memos-artalk-input", artalkInput.value);
       if(artalkSiteInput.value !== null || artalkSiteInput.value !== '') window.localStorage && window.localStorage.setItem("memos-artalksite-input", artalkSiteInput.value);
       if(twikooInput.value !== null || twikooInput.value !== '') window.localStorage && window.localStorage.setItem("memos-twikoo-input", twikooInput.value);
+      if(cfwkAiUrlInput.value !== null || cfwkAiUrlInput.value !== '') window.localStorage && window.localStorage.setItem("memos-cfwkai-url", cfwkAiUrlInput.value);
     }
   });
 
@@ -1847,6 +1859,35 @@ document.onscroll = function() {
 BackTop.onclick=function(){
 	document.body.scrollIntoView({behavior: 'smooth'})
 };
+
+cfAiBtn.addEventListener("click", async function () {
+  let cfwkAiUrl = window.localStorage && window.localStorage.getItem("memos-cfwkai-url")
+  if(cfwkAiUrl != null && cfwkAiUrl !== ""){
+    cfAiBtn.classList.add("d-none","noclick")
+    cfAiLoadBtn.classList.remove("d-none")
+    let uuid = '';
+    const chars = 'abcdef0123456789';
+    for (let i = 0; i < 32; i++) {
+      const charIndex = Math.floor(Math.random() * chars.length);
+      uuid += chars[charIndex];
+      if (i === 7 || i === 11 || i === 15 || i === 19) {uuid += '-';}
+    }
+    let textOld = memosTextarea.value
+    let input = encodeURIComponent(memosTextarea.value)
+    let fetchUrl = `${cfwkAiUrl}/${uuid}?q=${input}`
+    let aiResponse = await fetch(fetchUrl).then(res => res.json()).then(resdata =>{
+        return resdata[0].response[resdata[0].response.length - 1].content.response
+    })
+    //console.log(aiResponse)
+    if (aiResponse.length > 0) {
+      cfAiBtn.classList.remove("d-none","noclick")
+      cfAiLoadBtn.classList.add("d-none")
+      memosTextarea.value = `${textOld}\n----------\n${aiResponse}`
+      memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
+    }
+  }
+});
+
 
 /**
  * Lately.min.js 2.5.2

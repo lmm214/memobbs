@@ -800,3 +800,14 @@ buttom.cancel-edit-btn{margin-left:-1rem;}
 .backtop:focus {
 	background-color: var(--main-color);
 }
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.cfworkerai-load-btn svg{
+    animation: spin 1s infinite linear;
+}
