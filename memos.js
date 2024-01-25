@@ -69,6 +69,9 @@ var userNow = `
 </div>`
 memosDom.insertAdjacentHTML('beforebegin', userNow);
 
+var backTop = `<div class="backtop d-none"><svg xmlns="http://www.w3.org/2000/svg" width="1.25rem" height="1.25rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m18 15l-6-6l-6 6"/></svg></div>`
+memosDom.insertAdjacentHTML('afterend', backTop);
+
 var memosEditorCont = `
 <div class="memos-editor animate__animated animate__fadeIn col-12 d-none">
   <div class="memos-editor-body mb-3 p-3">
@@ -549,7 +552,7 @@ async function updateHtml(data) {
     }
     
     //解析内置资源文件
-    console.log(memo)
+    //console.log(memo)
     if (memo.resourceList && memo.resourceList.length > 0) {
       let resourceList = memo.resourceList;
       let imgUrl = '',resUrl = '',resImgLength = 0;
@@ -1357,7 +1360,7 @@ function getEditIcon() {
 
   codeBtn.addEventListener("click", function () {
     let memoCode = "\n```\n\n```\n";
-    insertValue(memoCode,"",0);
+    insertValue(memoCode,"",5);
   });
 
   linkBtn.addEventListener("click", function () {
@@ -1831,6 +1834,19 @@ function insertEmoji(emojiText) {
   memosTextarea.focus();
 }
 
+// 回到顶部
+let BackTop = document.querySelector(".backtop")
+document.onscroll = function() {
+	var iRollingLength = document.documentElement.scrollTop
+	if(iRollingLength > 300){
+		BackTop.classList.add("d-md-flex")
+	}else{
+		BackTop.classList.remove("d-md-flex")
+	}
+}
+BackTop.onclick=function(){
+	document.body.scrollIntoView({behavior: 'smooth'})
+};
 
 /**
  * Lately.min.js 2.5.2

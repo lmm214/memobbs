@@ -775,3 +775,28 @@ buttom.cancel-edit-btn{margin-left:-1rem;}
 	color: var(--light-color-hover)
 }
 .dark .myfeeds .myfeeds-floor{color: var(--dark-color-hover)}
+
+.backtop {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.33rem;
+    background-color: var(--light-color-third);
+    -webkit-transition: all 0.6s ease;
+    transition: all 0.6s ease;
+    font-size: 1rem;
+    color: var(--light-background);
+}
+.dark .backtop {
+	background-color: var(--light-color);
+}
+
+.backtop:hover,
+.backtop:focus {
+	background-color: var(--main-color);
+}
