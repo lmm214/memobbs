@@ -1406,7 +1406,7 @@ function getEditIcon() {
       nowTag = nowTagText.textContent;
       userMemoUrl= `${nowLink}/api/v1/memo?tag=${nowTag}`
     }else{
-      userMemoUrl = `${nowLink}/api/v1/memo`
+      userMemoUrl = `${nowLink}/api/v1/memo/stats?creatorId=${nowId}`
     }
     if(!memosAllCount || nowTagText){
       try {
