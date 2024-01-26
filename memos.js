@@ -72,7 +72,20 @@ memosDom.insertAdjacentHTML('beforebegin', userNow);
 var backTop = `<div class="backtop d-none"><svg xmlns="http://www.w3.org/2000/svg" width="1.25rem" height="1.25rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m18 15l-6-6l-6 6"/></svg></div>`
 memosDom.insertAdjacentHTML('afterend', backTop);
 
+
+var getEditor = window.localStorage && window.localStorage.getItem("memos-editor-display");
+var getMode = window.localStorage && window.localStorage.getItem("memos-mode");
+var memosOpenId = window.localStorage && window.localStorage.getItem("memos-access-token");
+var memosPath = window.localStorage && window.localStorage.getItem("memos-access-path");
+var memosMeID = window.localStorage && window.localStorage.getItem("memos-me-id");
+var memosMeNickname = window.localStorage && window.localStorage.getItem("memos-me-nickname");
+var memosMeAvatarUrl = window.localStorage && window.localStorage.getItem("memos-me-avatarurl");
+var memosMeArtalk = window.localStorage && window.localStorage.getItem("memos-artalk-input");
+var memosMeArtalkSite = window.localStorage && window.localStorage.getItem("memos-artalksite-input");
+var memosMeTwikoo = window.localStorage && window.localStorage.getItem("memos-twikoo-input");
 let cfwkAiUrl = window.localStorage && window.localStorage.getItem("memos-cfwkai-url")
+let geminiKey = window.localStorage && window.localStorage.getItem("memos-gemini-key")
+
 var memosEditorCont = `
 <div class="memos-editor animate__animated animate__fadeIn col-12 d-none">
   <div class="memos-editor-body mb-3 p-3">
@@ -105,12 +118,18 @@ var memosEditorCont = `
             <svg xmlns="http://www.w3.org/2000/svg" width="1.35rem" height="1.35rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7m4 2h6m-3-3v6"/><circle cx="9" cy="9" r="2"/><path d="m21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></g></svg>
             <input class="memos-upload-image-input d-none" type="file" accept="image/*">
           </div>
+          ${geminiKey != null && geminiKey !== "" ? `
+            <div class="button outline action-btn mr-2 geminiai-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21.64 3.64l-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72M14 7l3 3M5 6v4m14 4v4M10 2v2M7 8H3m18 8h-4M11 3H9"/></svg></div>
+            <div class="button outline action-btn mr-2 geminiai-load-btn d-none noclick">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+            </div>` : ""}
           ${cfwkAiUrl != null && cfwkAiUrl !== "" ? `
             <div class="button outline action-btn mr-2 cfworkerai-btn">
               <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2m16 0h2m-7-1v2m-6-2v2"/></g></svg>
             </div>
             <div class="button outline action-btn mr-2 cfworkerai-load-btn d-none noclick">
-              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
             </div>` : ""}
         </div>
         <div class="d-flex flex-fill">
@@ -149,12 +168,13 @@ var memosEditorCont = `
     </div>
     <div class="memos-editor-option animate__animated animate__fadeIn d-none">
       <div class="row flex-fill mr-3 p-2">
-        <input name="memos-path-url" class="memos-path-input border-b input-text col-6 py-2" type="text" value="" placeholder="Memo 网址">
-        <input name="memos-token-url" class="memos-token-input border-b input-text col-6 py-2" type="text" value="" placeholder="Access Tokens">
-        <input name="artalk-url" class="memos-artalk-input border-b input-text col-6 py-2" type="text" value="" placeholder="[可选]Artalk 评论网址">
-        <input name="artalk-site-name" class="memos-artalksite-input border-b input-text col-6 py-2" type="text" value="" placeholder="[可选] Artalk 站点名称">
-        <input name="twikoo-path-url" class="memos-twikoo-input border-b input-text col-6 py-2" type="text" value="" placeholder="[可选]Twikoo 评论网址">
-        <input name="twikoo-path-url" class="cfwkai-url-input border-b input-text col-6 py-2" type="text" value="" placeholder="[可选]Cloudflare AI 网址">
+        <input name="memos-path-url" class="memos-path-input border-b input-text col-6 py-2" type="text" value="${memosPath ? memosPath : ''}" placeholder="${memosPath ? memosPath : 'Memo 网址'}">
+        <input name="memos-token-url" class="memos-token-input border-b input-text col-6 py-2" type="text" value="${memosOpenId ? memosOpenId : ''}" placeholder="${memosOpenId ? memosOpenId : 'Access Tokens'}">
+        <input name="artalk-url" class="memos-artalk-input border-b input-text col-6 py-2" type="text" value="${memosMeArtalk ? memosMeArtalk : ''}" placeholder="${memosMeArtalk ? memosMeArtalk : '[可选]Artalk 评论网址'}">
+        <input name="artalk-site-name" class="memos-artalksite-input border-b input-text col-6 py-2" type="text" value="${memosMeArtalkSite ? memosMeArtalkSite : ''}" placeholder="${memosMeArtalkSite ? memosMeArtalkSite : '[可选] Artalk 站点名称'}">
+        <input name="twikoo-path-url" class="memos-twikoo-input border-b input-text col-6 py-2" type="text" value="${memosMeTwikoo ? memosMeTwikoo : ''}" placeholder="${memosMeTwikoo ? memosMeTwikoo : '[可选]Twikoo 评论网址'}">
+        <input name="cfwkai-url" class="cfwkai-url-input border-b input-text col-6 py-2" type="text" value="${cfwkAiUrl ? cfwkAiUrl : ''}" placeholder="${cfwkAiUrl ? cfwkAiUrl : '[可选]Cloudflare AI 网址'}">
+        <input name="gemini-key" class="gemini-key-input border-b input-text col-6 py-2" type="text" value="${geminiKey ? geminiKey : ''}" placeholder="${geminiKey ? geminiKey : '[可选]Gemini Pro Key'}">
       </div>
       <button class="primary submit-openapi-btn px-5 py-2">保存</button>
     </div>
@@ -175,6 +195,8 @@ var linkBtn = document.querySelector(".link-btn");
 var linkPicBtn = document.querySelector(".linkpic-btn");
 var cfAiBtn = document.querySelector(".cfworkerai-btn") || "";
 var cfAiLoadBtn = document.querySelector(".cfworkerai-load-btn");
+var geminiAIBtn = document.querySelector(".geminiai-btn") || "";
+var geminiAILoadBtn = document.querySelector(".geminiai-load-btn");
 var randomBtn = document.querySelector(".random-btn");
 var oneDayBtn = document.querySelector(".oneday-btn");
 var userButton = document.querySelector('.user-button-span');
@@ -194,18 +216,9 @@ var artalkInput = document.querySelector(".memos-artalk-input");
 var artalkSiteInput = document.querySelector(".memos-artalksite-input");
 var twikooInput = document.querySelector(".memos-twikoo-input");
 var cfwkAiUrlInput = document.querySelector(".cfwkai-url-input");
+var geminiKeyInput = document.querySelector(".gemini-key-input");
 var uploadImageInput = document.querySelector(".memos-upload-image-input");
 var memosTextarea = document.querySelector(".memos-editor-textarea");
-var getEditor = window.localStorage && window.localStorage.getItem("memos-editor-display");
-var getMode = window.localStorage && window.localStorage.getItem("memos-mode");
-var memosOpenId = window.localStorage && window.localStorage.getItem("memos-access-token");
-var memosPath = window.localStorage && window.localStorage.getItem("memos-access-path");
-var memosMeID = window.localStorage && window.localStorage.getItem("memos-me-id");
-var memosMeNickname = window.localStorage && window.localStorage.getItem("memos-me-nickname");
-var memosMeAvatarUrl = window.localStorage && window.localStorage.getItem("memos-me-avatarurl");
-var memosMeArtalk = window.localStorage && window.localStorage.getItem("memos-artalk-input");
-var memosMeArtalkSite = window.localStorage && window.localStorage.getItem("memos-artalksite-input");
-var memosMeTwikoo = window.localStorage && window.localStorage.getItem("memos-twikoo-input");
 
 var editMemoDom = document.querySelector(".edit-memos");
 var editMemoBtn = document.querySelector(".edit-memos-btn");
@@ -1579,8 +1592,8 @@ function getEditIcon() {
     memosEditorOption.classList.remove("d-none");
     memosEditorInner.classList.add("d-none");
     memosRadomCont.innerHTML = '';
-    tokenInput.value = '';
-    pathInput.value = '';
+    //tokenInput.value = '';
+    //pathInput.value = '';
   });
 
   submitApiBtn.addEventListener("click", function () {
@@ -1598,6 +1611,7 @@ function getEditIcon() {
       if(artalkSiteInput.value !== null || artalkSiteInput.value !== '') window.localStorage && window.localStorage.setItem("memos-artalksite-input", artalkSiteInput.value);
       if(twikooInput.value !== null || twikooInput.value !== '') window.localStorage && window.localStorage.setItem("memos-twikoo-input", twikooInput.value);
       if(cfwkAiUrlInput.value !== null || cfwkAiUrlInput.value !== '') window.localStorage && window.localStorage.setItem("memos-cfwkai-url", cfwkAiUrlInput.value);
+      if(geminiKeyInput.value !== null || geminiKeyInput.value !== '') window.localStorage && window.localStorage.setItem("memos-gemini-key", geminiKeyInput.value);
     }
   });
 
@@ -1907,7 +1921,6 @@ BackTop.onclick=function(){
 
 if(cfwkAiUrl != null && cfwkAiUrl !== ""){
 cfAiBtn.addEventListener('click', async function () {
-  let cfwkAiUrl = window.localStorage && window.localStorage.getItem("memos-cfwkai-url")
   cfAiBtn.classList.add("d-none","noclick")
   cfAiLoadBtn.classList.remove("d-none")
   try{
@@ -1932,6 +1945,43 @@ cfAiBtn.addEventListener('click', async function () {
     cfAiLoadBtn.classList.remove("d-none")
     cocoMessage.error('已超时，请稍后再试～');
   }
+});
+}
+
+if(geminiKey != null && geminiKey !== ""){
+geminiAIBtn.addEventListener('click', async function () {
+  geminiAIBtn.classList.add("d-none","noclick")
+  geminiAILoadBtn.classList.remove("d-none")
+  let textOld = memosTextarea.value
+  memosTextarea.value = `${textOld}\n----------\n`
+    const res = await fetch('https://ai-ge.memobbs.app/v1/chat/completions', {
+      headers: {
+        'Authorization': `Bearer ${geminiKey}`,
+        'Content-Type': 'application/json'
+      },
+      method: 'POST', 
+      body: JSON.stringify({
+        model: 'gemini-pro',
+        messages: [{ role: 'user', content: textOld }],
+        temperature: 0.7,
+        stream: true
+      })
+    })
+    const reader = res.body.getReader()
+    while(true) {
+      const {value, done} = await reader.read()
+      if (done) {
+        geminiAIBtn.classList.remove("d-none","noclick")
+        geminiAILoadBtn.classList.add("d-none")
+        break
+      }
+        const text = JSON.parse(new TextDecoder().decode(value))
+        const resData = text.choices[0].delta.content
+        if(resData.length > 0){
+          memosTextarea.value += resData
+          memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
+        }
+    }
 });
 }
 
