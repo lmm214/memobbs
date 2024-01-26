@@ -599,6 +599,17 @@ async function updateHtml(data) {
     let memosOpenId = window.localStorage && window.localStorage.getItem("memos-access-token");
     if (memosOpenId != null && memosOpenId !== ""  && nowId == creatorId && nowLink == link) {
       itemOption = `<div class="item-option mr-1"><div class="d-flex dropdown"><svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></g></svg><div class="dropdown-wrapper d-none"><a class="btn edit-btn" data-form="${memoString}" onclick="editMemo(this)">编辑</a><a class="btn" onclick="archiveMemo('${memo.id}')">归档</a><a class="btn" onclick="deleteMemo('${memo.id}')">删除</a></div></div></div>`;
+    }else if (memosOpenId != null && memosOpenId !== ""  && nowId !== creatorId && nowLink !== link) {
+      itemOption = `<div class="item-option mr-1">
+        <div class="d-flex dropdown">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></g></svg>
+          <div class="dropdown-wrapper d-none">
+            <a class="btn" data-form="${memoString}" onclick="saveMemo(this)">收藏</a>
+            <a class="btn" data-form="${memoString}" onclick="viaNow(this)">引用</a>
+            <a class="btn" href="${memosLink}" target="_blank" rel="noopener noreferrer">跳转</a>
+          </div>
+        </div>
+      </div>`;
     }else{
       itemOption = `<div class="item-option mr-1"><a class="d-flex" href="${memosLink}" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></div>`;
     } 
@@ -613,7 +624,7 @@ async function updateHtml(data) {
       itemContent += `<div class="d-flex flex-fill justify-content-end"></div></div>`;
     }
     itemContent += `</div></div></div>`
-    result += `<div class="${memosMode == "MEMOSHOME" && tagnowHas == null &&oneDayTag !== null && i == 0 ? oneDayClass : ''} memo-${memosId} d-flex animate__animated mb-3"><div class="card-item flex-fill p-3"><div class="item-header d-flex mb-3"><div class="d-flex flex-fill"><div onclick="getUserMemos('${link}', '${creatorId}','${creatorName}','${avatar}')" class="item-avatar mr-2" style="background-image:url(${avatar})"></div><div class="item-sub d-flex flex-column p-1"><div class="item-creator"><a href="${website}" target="_blank">${creatorName}</a></div><div class="item-mate mt-2 text-xs" onclick="viaNow('${creatorName}','${memosLink}')">${new Date(createdTs * 1000 - 5 ).toLocaleString()}</div></div></div>${itemOption}</div>${neodbDom+itemContent}</div></div>`;
+    result += `<div class="${memosMode == "MEMOSHOME" && tagnowHas == null &&oneDayTag !== null && i == 0 ? oneDayClass : ''} memo-${memosId} d-flex animate__animated mb-3"><div class="card-item flex-fill p-3"><div class="item-header d-flex mb-3"><div class="d-flex flex-fill"><div onclick="getUserMemos('${link}', '${creatorId}','${creatorName}','${avatar}')" class="item-avatar mr-2" style="background-image:url(${avatar})"></div><div class="item-sub d-flex flex-column p-1"><div class="item-creator"><a href="${website}" target="_blank">${creatorName}</a></div><div class="item-mate mt-2 text-xs">${new Date(createdTs * 1000 - 5 ).toLocaleString()}</div></div></div>${itemOption}</div>${neodbDom+itemContent}</div></div>`;
   } // end for
   
   memoDom.insertAdjacentHTML('beforeend', result);
@@ -1128,6 +1139,30 @@ function loadArtalk(e) {
     document.getElementById("artalk").remove()
   }
 }
+//收藏
+function saveMemo(memo) {
+    let e = JSON.parse(memo.getAttribute("data-form"));
+    memosContent = e.content;
+    memosOpenId = window.localStorage && window.localStorage.getItem("memos-access-token");
+    let  hasContent = memosContent.length !== 0;
+    if (memosOpenId && hasContent) {
+      submitMemoBtn.classList.add("noclick")
+      let memoUrl = `${memosPath}/api/v1/memo`;
+      let memoBody = {content:memosContent,visibility:"PRIVATE"}
+      fetch(memoUrl, {
+        method: 'POST',
+        body: JSON.stringify(memoBody),
+        headers: {
+          'Authorization': `Bearer ${memosOpenId}`,
+          'Content-Type': 'application/json'
+        }
+      }).then(function (res) {
+          cocoMessage.success('收藏成功')
+      });
+    }else if(!hasContent){
+      cocoMessage.info('内容不能为空');
+    }
+}
 
 //编辑修改
 let memosOldSelect;
@@ -1285,9 +1320,18 @@ function deleteMemo(memoId) {
   }
 }
 
-function viaNow(name,link){
-  let viaCopy = ` （via [@${name}](${link})）`
-  navigator.clipboard.writeText(viaCopy).then(() => {alert(viaCopy)});
+function viaNow(e){
+  let dataForm = JSON.parse(e.getAttribute("data-form"));
+  let memoName = dataForm.creatorName
+  let memoLink = dataForm.link+ "/m/" + dataForm.id;
+  let memoContent = dataForm.content
+  if(memoContent.length > 120){
+    memoContent = memoContent.substring(0, 119) + '...';
+  }
+  let viaCopy = `${memoContent}（via [@${memoName}](${memoLink})）`
+  navigator.clipboard.writeText(viaCopy).then(() => {
+    cocoMessage.success("引用内容已复制")
+  });
 }
 
 function getEditIcon() {
