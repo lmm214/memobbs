@@ -366,7 +366,7 @@ blockquote {
 .memos-editor-body{display:flex;border-radius:.33rem;background-color:var(--light-background-secondary);flex-direction:column;}
 .dark .memos-editor-body{border: 1px solid var(--dark-background-hover);background-color: var(--dark-background-secondary);}
 .memos-editor-content,.memos-editor-footer,.memos-editor-option{display: flex;}
-.memos-editor-content .memos-editor-textarea{max-height:160px;overflow-y:scroll;}
+.memos-editor-content .memos-editor-textarea{overflow-y:scroll;}
 .memos-image-list .image-background{background-size:cover;background-repeat:no-repeat;width:8rem;height:8rem;border-radius:0.33rem}
 .memos-image-list .memos-tag:hover{text-decoration: line-through;}
 .memos-editor-tools{display: flex;flex-direction: column;}

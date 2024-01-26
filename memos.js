@@ -1913,13 +1913,17 @@ cfAiBtn.addEventListener('click', async function () {
     let textOld = memosTextarea.value
     let input = encodeURIComponent(memosTextarea.value)
     let fetchUrl = `${cfwkAiUrl}/?q=${input}`
-    let aiResponse = await fetch(fetchUrl).then(res => res.json()).then(resdata =>{
-      return resdata[0].response.response
-    })
-    if (aiResponse.length > 0) {
-      cfAiBtn.classList.remove("d-none","noclick")
-      cfAiLoadBtn.classList.add("d-none")
-      memosTextarea.value = `${textOld}\n----------\n${aiResponse}`
+    const source = new EventSource(fetchUrl);
+    memosTextarea.value = `${textOld}\n----------\n`
+    source.onmessage = (event) => {
+      if(event.data=="[DONE]") {
+        cfAiBtn.classList.remove("d-none","noclick")
+        cfAiLoadBtn.classList.add("d-none")
+        source.close();
+        return;
+      }
+      const data = JSON.parse(event.data);
+      memosTextarea.value += data.response
       memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
     }
   } catch (error) {
