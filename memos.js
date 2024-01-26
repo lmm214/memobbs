@@ -1907,33 +1907,26 @@ BackTop.onclick=function(){
 if(cfwkAiUrl != null && cfwkAiUrl !== ""){
 cfAiBtn.addEventListener('click', async function () {
   let cfwkAiUrl = window.localStorage && window.localStorage.getItem("memos-cfwkai-url")
-  
+  cfAiBtn.classList.add("d-none","noclick")
+  cfAiLoadBtn.classList.remove("d-none")
+  try{
+    let textOld = memosTextarea.value
+    let input = encodeURIComponent(memosTextarea.value)
+    let fetchUrl = `${cfwkAiUrl}/?q=${input}`
+    let aiResponse = await fetch(fetchUrl).then(res => res.json()).then(resdata =>{
+      return resdata[0].response.response
+    })
+    if (aiResponse.length > 0) {
+      cfAiBtn.classList.remove("d-none","noclick")
+      cfAiLoadBtn.classList.add("d-none")
+      memosTextarea.value = `${textOld}\n----------\n${aiResponse}`
+      memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
+    }
+  } catch (error) {
     cfAiBtn.classList.add("d-none","noclick")
     cfAiLoadBtn.classList.remove("d-none")
-    let uuid = '';
-    const chars = 'abcdef0123456789';
-    for (let i = 0; i < 32; i++) {
-      const charIndex = Math.floor(Math.random() * chars.length);
-      uuid += chars[charIndex];
-      if (i === 7 || i === 11 || i === 15 || i === 19) {uuid += '-';}
-    }
-    try{
-      let textOld = memosTextarea.value
-      let input = encodeURIComponent(memosTextarea.value)
-      let fetchUrl = `${cfwkAiUrl}/${uuid}?q=${input}`
-      let aiResponse = await fetch(fetchUrl).then(res => res.json()).then(resdata =>{
-          return resdata[0].response[resdata[0].response.length - 1].content.response
-      })
-      //console.log(aiResponse)
-      if (aiResponse.length > 0) {
-        cfAiBtn.classList.remove("d-none","noclick")
-        cfAiLoadBtn.classList.add("d-none")
-        memosTextarea.value = `${textOld}\n----------\n${aiResponse}`
-        memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
-      }
-    } catch (error) {
-      cocoMessage.error('出错了，再检查一下吧!');
-    }
+    cocoMessage.error('已超时，请稍后再试～');
+  }
 });
 }
 
