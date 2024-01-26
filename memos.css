@@ -808,6 +808,6 @@ buttom.cancel-edit-btn{margin-left:-1rem;}
         transform: rotate(360deg);
     }
 }
-.cfworkerai-load-btn svg{
+.cfworkerai-load-btn svg,.geminiai-load-btn svg{
     animation: spin 1s infinite linear;
 }
