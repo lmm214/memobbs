@@ -173,7 +173,7 @@ var codeoneBtn = document.querySelector(".codeone-btn");
 var codeBtn = document.querySelector(".code-btn");
 var linkBtn = document.querySelector(".link-btn");
 var linkPicBtn = document.querySelector(".linkpic-btn");
-var cfAiBtn = document.querySelector(".cfworkerai-btn");
+var cfAiBtn = document.querySelector(".cfworkerai-btn") || "";
 var cfAiLoadBtn = document.querySelector(".cfworkerai-load-btn");
 var randomBtn = document.querySelector(".random-btn");
 var oneDayBtn = document.querySelector(".oneday-btn");
@@ -1860,13 +1860,10 @@ BackTop.onclick=function(){
 	document.body.scrollIntoView({behavior: 'smooth'})
 };
 
-cfAiBtn.addEventListener("click", function (){
-  cfAiBtnLoad()
-})
-
-async function cfAiBtnLoad() {
+if(cfwkAiUrl != null && cfwkAiUrl !== ""){
+cfAiBtn.addEventListener('click', async function () {
   let cfwkAiUrl = window.localStorage && window.localStorage.getItem("memos-cfwkai-url")
-  if(cfwkAiUrl != null && cfwkAiUrl !== ""){
+  
     cfAiBtn.classList.add("d-none","noclick")
     cfAiLoadBtn.classList.remove("d-none")
     let uuid = '';
@@ -1893,7 +1890,7 @@ async function cfAiBtnLoad() {
     } catch (error) {
       cocoMessage.error('出错了，再检查一下吧!');
     }
-  }
+});
 }
 
 /**
