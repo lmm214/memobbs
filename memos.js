@@ -1414,8 +1414,9 @@ function getEditIcon() {
   });
 
   codeBtn.addEventListener("click", function () {
-    let memoCode = "\n```\n\n```\n";
+    let memoCode = "```\n\n```\n";
     insertValue(memoCode,"",5);
+    memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
   });
 
   linkBtn.addEventListener("click", function () {
