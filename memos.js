@@ -168,13 +168,13 @@ var memosEditorCont = `
     </div>
     <div class="memos-editor-option animate__animated animate__fadeIn d-none">
       <div class="row flex-fill mr-3 p-2">
-        <input name="memos-path-url" class="memos-path-input border-b input-text col-6 py-2" type="text" value="${memosPath ? memosPath : ''}" placeholder="${memosPath ? memosPath : 'Memo 网址'}">
-        <input name="memos-token-url" class="memos-token-input border-b input-text col-6 py-2" type="text" value="${memosOpenId ? memosOpenId : ''}" placeholder="${memosOpenId ? memosOpenId : 'Access Tokens'}">
-        <input name="artalk-url" class="memos-artalk-input border-b input-text col-6 py-2" type="text" value="${memosMeArtalk ? memosMeArtalk : ''}" placeholder="${memosMeArtalk ? memosMeArtalk : '[可选]Artalk 评论网址'}">
-        <input name="artalk-site-name" class="memos-artalksite-input border-b input-text col-6 py-2" type="text" value="${memosMeArtalkSite ? memosMeArtalkSite : ''}" placeholder="${memosMeArtalkSite ? memosMeArtalkSite : '[可选] Artalk 站点名称'}">
-        <input name="twikoo-path-url" class="memos-twikoo-input border-b input-text col-6 py-2" type="text" value="${memosMeTwikoo ? memosMeTwikoo : ''}" placeholder="${memosMeTwikoo ? memosMeTwikoo : '[可选]Twikoo 评论网址'}">
-        <input name="cfwkai-url" class="cfwkai-url-input border-b input-text col-6 py-2" type="text" value="${cfwkAiUrl ? cfwkAiUrl : ''}" placeholder="${cfwkAiUrl ? cfwkAiUrl : '[可选]Cloudflare AI 网址'}">
-        <input name="gemini-key" class="gemini-key-input border-b input-text col-6 py-2" type="text" value="${geminiKey ? geminiKey : ''}" placeholder="${geminiKey ? geminiKey : '[可选]Gemini Pro Key'}">
+        <input name="memos-path-url" class="memos-path-input border-b input-text col-6 py-2" type="text" value="${memosPath ? memosPath : ''}" placeholder="Memo 网址">
+        <input name="memos-token-url" class="memos-token-input border-b input-text col-6 py-2" type="text" value="${memosOpenId ? memosOpenId : ''}" placeholder="Access Tokens">
+        <input name="artalk-url" class="memos-artalk-input border-b input-text col-6 py-2" type="text" value="${memosMeArtalk ? memosMeArtalk : ''}" placeholder="[可选]Artalk 评论网址">
+        <input name="artalk-site-name" class="memos-artalksite-input border-b input-text col-6 py-2" type="text" value="${memosMeArtalkSite ? memosMeArtalkSite : ''}" placeholder="[可选] Artalk 站点名称">
+        <input name="twikoo-path-url" class="memos-twikoo-input border-b input-text col-6 py-2" type="text" value="${memosMeTwikoo ? memosMeTwikoo : ''}" placeholder="[可选]Twikoo 评论网址">
+        <input name="cfwkai-url" class="cfwkai-url-input border-b input-text col-6 py-2" type="text" value="${cfwkAiUrl ? cfwkAiUrl : ''}" placeholder="[可选]Cloudflare AI 网址">
+        <input name="gemini-key" class="gemini-key-input border-b input-text col-6 py-2" type="text" value="${geminiKey ? geminiKey : ''}" placeholder="[可选]Gemini Pro Key">
       </div>
       <button class="primary submit-openapi-btn px-5 py-2">保存</button>
     </div>
