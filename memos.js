@@ -806,7 +806,7 @@ function searchNow(serchText){
     if(tagnowHas) tagnowHas.remove();
     let usernowName = document.querySelector(".user-now-name").innerHTML;
     let serchDom = `
-      <div class="memos-tagnow row p-2 mb-2"">
+      <div class="memos-tagnow row p-2 mb-2">
         <div class="memos-tagnow-title mr-3">当前搜索:</div>
         <div class="memos-tagnow-name card-item pr-2 pl-2" onclick="reloadUser('search')">${serchText}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-auto ml-1 opacity-40"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></div>
       </div>`
@@ -1090,7 +1090,7 @@ function getTagNow(u,i,n,a,e){
   if(tagnowHas) tagnowHas.remove();
   let tagName = e.innerHTML
   let tagnowDom = `
-  <div class="memos-tagnow row p-2 mb-2"">
+  <div class="memos-tagnow row p-2 mb-2">
     <div class="memos-tagnow-title mr-3">标签筛选:</div>
     <div class="memos-tagnow-name card-item pr-2 pl-2" onclick="reloadUser()">${tagName}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-auto ml-1 opacity-40"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></div>
   </div>`
