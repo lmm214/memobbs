@@ -409,8 +409,10 @@ blockquote {
 	border-radius: .33rem;
 	background-color: var(--light-background-secondary);
 	font-size:1rem;
+	box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+	z-index: 999;
 }
-
+.aitop .dropdown-wrapper{top:0rem;right:1.55rem;}
 .dark .dropdown-wrapper {
 	background-color: var(--dark-background);
 }

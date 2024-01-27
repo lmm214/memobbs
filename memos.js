@@ -5,7 +5,7 @@
 var memosData = {
   dom:"#memos",
   listDom:"#memo-list",
-  limit:"8"
+  limit:"2"
 }
 var memosDom = document.querySelector(memosData.dom);
 
@@ -118,10 +118,17 @@ var memosEditorCont = `
             <svg xmlns="http://www.w3.org/2000/svg" width="1.35rem" height="1.35rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7m4 2h6m-3-3v6"/><circle cx="9" cy="9" r="2"/><path d="m21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></g></svg>
             <input class="memos-upload-image-input d-none" type="file" accept="image/*">
           </div>
+          
           ${geminiKey != null && geminiKey !== "" ? `
-            <div class="button outline action-btn mr-2 geminiai-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21.64 3.64l-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72M14 7l3 3M5 6v4m14 4v4M10 2v2M7 8H3m18 8h-4M11 3H9"/></svg></div>
-            <div class="button outline action-btn mr-2 geminiai-load-btn d-none noclick">
+            <div class="button outline geminiai-btn action-btn mr-2 dropdown aitop">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21.64 3.64l-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72M14 7l3 3M5 6v4m14 4v4M10 2v2M7 8H3m18 8h-4M11 3H9"/></svg>
+              <div class="dropdown-wrapper d-none">
+                <span class="btn" onclick="geminiAI(this)">语音润色</span>
+                <span class="btn" onclick="geminiAI(this)">自动标签</span>
+                <span class="btn" onclick="geminiAI(this)">智能问答</span>
+              </div>
+            </div>
+            <div class="button outline geminiai-load-btn d-none noclick action-btn mr-2 ">
               <svg xmlns="http://www.w3.org/2000/svg" width="1.15rem" height="1.15rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
             </div>` : ""}
           ${cfwkAiUrl != null && cfwkAiUrl !== "" ? `
@@ -243,6 +250,7 @@ let nowLink;
 let nowId;
 let nowName;
 let nowAvatar;
+let nowTagList = "";
 var memoChangeDate = 0;
 var getSelectedValue = window.localStorage && window.localStorage.getItem("memos-visibility-select") || "PUBLIC";
 
@@ -1690,6 +1698,7 @@ function getEditIcon() {
       }).then(response => {
         let taglist = "";
         response.map((t)=>{
+          nowTagList += `${t},`;
           taglist += `<div class="memos-tag d-flex text-xs mt-2 mr-2 px-2" onclick="setMemoTag(this)">#${t}</div>`;
         })
         document.querySelector(".memos-tag-list").innerHTML = taglist;
@@ -1948,42 +1957,84 @@ cfAiBtn.addEventListener('click', async function () {
 });
 }
 
-if(geminiKey != null && geminiKey !== ""){
-geminiAIBtn.addEventListener('click', async function () {
+function geminiAI(e){
   geminiAIBtn.classList.add("d-none","noclick")
   geminiAILoadBtn.classList.remove("d-none")
+  console.log(e.innerText)
+  let AIMode = e.innerText
   let textOld = memosTextarea.value
-  memosTextarea.value = `${textOld}\n----------\n`
-    const res = await fetch('https://ai-ge.memobbs.app/v1/chat/completions', {
-      headers: {
-        'Authorization': `Bearer ${geminiKey}`,
-        'Content-Type': 'application/json'
-      },
-      method: 'POST', 
-      body: JSON.stringify({
-        model: 'gemini-pro',
-        messages: [{ role: 'user', content: textOld }],
-        temperature: 0.7,
-        stream: true
-      })
+  //let memosRecent = await getMemosForAI()
+  let memosContent;
+  if(AIMode == "语音润色"){
+    memosTextarea.value = `${textOld}\n---\n`
+    memosContent = `请用简洁明了的语言，编辑以下段落，以改善其逻辑流程，消除任何印刷错误，并以中文作答。请务必保持文章的原意。请从编辑以下文字开始：[${textOld}]`
+  }
+  if(AIMode == "自动标签"){
+    //console.log(nowTagList)
+    memosContent = `分析这段文本内容：[${textOld}]，从这些标签列表中: ["${nowTagList}"] 尝试找出1个最适合的标签，并"#TAG "的形式反馈给我`
+  }
+  if(AIMode == "智能问答"){
+    memosTextarea.value = `${textOld}\n---\n`
+    memosContent = `${textOld}`
+  }
+  console.log(memosContent)
+  sendToGemini(memosContent)
+};
+
+async function sendToGemini(memosContent) {
+  const res = await fetch('https://ai-ge.memobbs.app/v1/chat/completions', {
+    headers: {
+      'Authorization': `Bearer ${geminiKey}`,
+      'Content-Type': 'application/json'
+    },
+    method: 'POST', 
+    body: JSON.stringify({
+      model: 'gemini-pro',
+      messages: [{ role: 'user', content: memosContent }],
+      temperature: 0.7,
+      stream: true
     })
-    const reader = res.body.getReader()
-    while(true) {
-      const {value, done} = await reader.read()
-      if (done) {
-        geminiAIBtn.classList.remove("d-none","noclick")
-        geminiAILoadBtn.classList.add("d-none")
-        break
-      }
-        const text = JSON.parse(new TextDecoder().decode(value))
-        const resData = text.choices[0].delta.content
-        if(resData.length > 0){
-          memosTextarea.value += resData
-          memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
-        }
+  })
+  const reader = res.body.getReader()
+  while(true) {
+    const {value, done} = await reader.read()
+    if (done) {
+      geminiAIBtn.classList.remove("d-none","noclick")
+      geminiAILoadBtn.classList.add("d-none")
+      break
     }
-});
+      const text = JSON.parse(new TextDecoder().decode(value))
+      const resData = text.choices[0].delta.content
+      if(resData.length > 0){
+        memosTextarea.value += resData
+        memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
+      }
+  }
 }
+
+async function getMemosForAI(){
+  let fetchUrl = `${nowLink}/api/v1/memo?creatorId=${nowId}&limit=100`
+  let response = await fetch(fetchUrl,{
+    headers: {
+      'Authorization': `Bearer ${memosOpenId}`,
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+    },
+    cache: 'no-store',
+  });
+  if (!response.ok) {
+    throw new Error(`Request failed oneDay`);
+  }
+  let originalArray = await response.json()
+
+  const filteredArray = originalArray.map(item => {
+    return { id: item.id, content: item.content };
+  });
+  
+  return JSON.stringify(filteredArray).substring(0, 30000);
+}
+
+
 
 /**
  * Lately.min.js 2.5.2
