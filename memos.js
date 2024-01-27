@@ -1958,27 +1958,28 @@ cfAiBtn.addEventListener('click', async function () {
 }
 
 function geminiAI(e){
-  geminiAIBtn.classList.add("d-none","noclick")
-  geminiAILoadBtn.classList.remove("d-none")
-  console.log(e.innerText)
   let AIMode = e.innerText
   let textOld = memosTextarea.value
-  //let memosRecent = await getMemosForAI()
   let memosContent;
   if(AIMode == "语音润色"){
     memosTextarea.value = `${textOld}\n---\n`
     memosContent = `请用简洁明了的语言，编辑以下段落，以改善其逻辑流程，消除任何印刷错误，并以中文作答。请务必保持文章的原意。请从编辑以下文字开始：[${textOld}]`
   }
   if(AIMode == "自动标签"){
-    //console.log(nowTagList)
     memosContent = `分析这段文本内容：[${textOld}]，从这些标签列表中: ["${nowTagList}"] 尝试找出1个最适合的标签，并"#TAG "的形式反馈给我`
   }
   if(AIMode == "智能问答"){
     memosTextarea.value = `${textOld}\n---\n`
     memosContent = `${textOld}`
   }
-  console.log(memosContent)
-  sendToGemini(memosContent)
+  //console.log(memosContent)
+  if(!textOld){
+    cocoMessage.info('内容不能为空');
+  }else{
+    geminiAIBtn.classList.add("d-none","noclick")
+    geminiAILoadBtn.classList.remove("d-none")
+    sendToGemini(memosContent)
+  }
 };
 
 async function sendToGemini(memosContent) {
@@ -1995,12 +1996,20 @@ async function sendToGemini(memosContent) {
       stream: true
     })
   })
+  if(res.ok){
+    geminiAIBtn.classList.remove("d-none","noclick")
+    geminiAILoadBtn.classList.add("d-none")
+  }else{
+    setTimeout(function() {
+      geminiAIBtn.classList.remove("d-none","noclick")
+      geminiAILoadBtn.classList.add("d-none")
+      cocoMessage.error("出错咯，稍后再试")
+    }, 1000);
+  }
   const reader = res.body.getReader()
   while(true) {
     const {value, done} = await reader.read()
     if (done) {
-      geminiAIBtn.classList.remove("d-none","noclick")
-      geminiAILoadBtn.classList.add("d-none")
       break
     }
       const text = JSON.parse(new TextDecoder().decode(value))
