@@ -118,6 +118,12 @@ var memosEditorCont = `
             <svg xmlns="http://www.w3.org/2000/svg" width="1.35rem" height="1.35rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7m4 2h6m-3-3v6"/><circle cx="9" cy="9" r="2"/><path d="m21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></g></svg>
             <input class="memos-upload-image-input d-none" type="file" accept="image/*">
           </div>
+	  <div class="button outline action-btn image-btn mr-2" onclick="this.lastElementChild.click()">
+   	 	<svg t="1706335528843" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6034" xmlns:xlink="http://www.w3.org/1999/xlink" width="1.35rem" height="1.35rem">
+       		<path d="M669.553493 952.874667H118.214827C52.934827 952.874667 0.02816 905.728 0.02816 847.786667V147.797333C0.02816 89.770667 53.062827 42.752 118.214827 42.752h787.626666C971.121493 42.752 1024.02816 89.898667 1024.02816 147.797333V637.866667c0 19.370667-17.621333 34.986667-39.381333 34.986666s-39.381333-15.616-39.381334-34.986666V147.797333c0-19.370667-17.749333-34.986667-39.381333-34.986666H118.17216c-21.76 0-39.381333 15.701333-39.381333 34.986666V847.786667c0 19.370667 17.749333 34.986667 39.381333 34.986666h551.381333c21.76 0 39.381333 15.658667 39.381334 35.029334 0 19.370667-17.578667 34.986667-39.381334 34.986666zM39.366827 742.826667a41.429333 41.429333 0 0 1-27.818667-10.282667 32.384 32.384 0 0 1 0-49.578667l196.224-174.250666c35.925333-32 90.709333-39.936 136.234667-19.712l213.674666 94.976a42.581333 42.581333 0 0 0 45.312-6.570667l353.706667-314.453333c15.402667-13.653333 40.405333-13.653333 55.808 0 15.36 13.696 15.36 35.925333 0 49.578666l-353.749333 314.453334c-35.968 31.914667-90.709333 39.893333-136.277334 19.626666L308.806827 551.68a42.581333 42.581333 0 0 0-45.269334 6.570667L67.185493 732.586667a41.429333 41.429333 0 0 1-27.818666 10.24z m275.754666-350.08a105.173333 105.173333 0 0 1-105.045333-105.045334 105.173333 105.173333 0 0 1 105.045333-105.002666 105.173333 105.173333 0 0 1 105.002667 105.002666 105.173333 105.173333 0 0 1-105.002667 105.045334z m0-140.032c-19.285333 0-34.986667 15.744-34.986666 34.986666 0 19.242667 15.701333 34.986667 34.986666 34.986667 19.2 0 34.986667-15.744 34.986667-34.986667 0-19.242667-15.786667-34.986667-34.986667-34.986666z m533.845334 700.16a34.986667 34.986667 0 0 1-34.986667-34.986667v-210.090667a34.986667 34.986667 0 1 1 69.973333 0v210.048a34.986667 34.986667 0 0 1-34.986666 34.986667z m140.032-140.032a34.858667 34.858667 0 0 1-23.936-9.514667l-116.053334-108.970667-116.096 109.056a34.944 34.944 0 1 1-47.914666-50.986666l122.752-115.285334a53.12 53.12 0 0 1 82.474666 0l122.752 115.285334a34.986667 34.986667 0 0 1-23.978666 60.416z" fill="#000000" p-id="6035"></path>
+   		</svg>
+   		<input class="memos-upload-Webp-image-input d-none" type="file" accept="image/*">
+	   </div>
           
           ${geminiKey != null && geminiKey !== "" ? `
             <div class="button outline geminiai-btn action-btn mr-2 dropdown aitop">
@@ -225,6 +231,9 @@ var twikooInput = document.querySelector(".memos-twikoo-input");
 var cfwkAiUrlInput = document.querySelector(".cfwkai-url-input");
 var geminiKeyInput = document.querySelector(".gemini-key-input");
 var uploadImageInput = document.querySelector(".memos-upload-image-input");
+//Webp格式
+var uploadWebpImageInput = document.querySelector(".memos-upload-Webp-image-input");
+
 var memosTextarea = document.querySelector(".memos-editor-textarea");
 
 var editMemoDom = document.querySelector(".edit-memos");
@@ -1552,7 +1561,89 @@ function getEditIcon() {
     oneDayBtn.classList.add("d-none")
   });
   
+  uploadWebpImageInput.addEventListener('change', () => {
+    let filesData = uploadWebpImageInput.files;
+    if (filesData.length !== 0) {
+        for (let i = 0; i < filesData.length; i++) {
+            uploadWebpImage(filesData[i]);
+        }
+        cocoMessage.info('图片上传中……');
+    }
+});
 
+async function uploadWebpImage(data) {
+    let memosResourceListNow = JSON.parse(window.localStorage && window.localStorage.getItem("memos-resource-list")) || [];
+    let imageData = new FormData(); // 创建新的 FormData 对象
+
+    let blobUrl = `${memosPath}/api/v1/resource/blob`;
+
+    const webpData = await convertToWebP(data);
+
+    const timestamp = new Date().getTime();
+    const fileName = `${timestamp}_${Math.random()}.webp`;
+
+    imageData.append('file', webpData, fileName);
+
+    let resp = await fetch(blobUrl, {
+        method: "POST",
+        body: imageData,
+        headers: {
+            'Authorization': `Bearer ${memosOpenId}`
+        }
+    });
+
+    let res = await resp.json();
+
+    if (res.id) {
+        let resexlink = res.externalLink;
+        let imgLink = '', fileId = '';
+        if (resexlink) {
+            imgLink = resexlink;
+        } else {
+            fileId = res.publicId || res.filename;
+            imgLink = `${memosPath}/o/r/${res.id}`;
+        }
+
+        let imageList = "";
+        imageList += `<div data-id="${res.id}" class="imagelist-item d-flex text-xs mt-2 mr-2" onclick="deleteImage(this)">
+                        <div class="d-flex image-background" style="background-image:url(${imgLink})">
+                            <span class="d-none">${fileId}</span>
+                        </div>
+                     </div>`;
+        document.querySelector(".memos-image-list").insertAdjacentHTML('afterbegin', imageList);
+
+        cocoMessage.success('上传成功', () => {
+            memosResourceListNow.push(res.id);
+            window.localStorage && window.localStorage.setItem("memos-resource-list", JSON.stringify(memosResourceListNow));
+            imageListDrag();
+        });
+    }
+}
+
+function convertToWebP(imageData) {
+    return new Promise((resolve) => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+
+        img.onload = function () {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+
+            console.log("Canvas dimensions:", canvas.width, canvas.height);
+
+            canvas.toBlob((blob) => {
+                // 添加调试语句
+                console.log("WebP Blob:", blob);
+
+                resolve(blob);
+            }, 'image/webp', 0.7); // 设置压缩质量为70%
+        };
+
+        img.src = URL.createObjectURL(imageData);
+    });
+};	
   uploadImageInput.addEventListener('change', () => {
     let filesData = uploadImageInput.files[0];
     if (uploadImageInput.files.length !== 0){
