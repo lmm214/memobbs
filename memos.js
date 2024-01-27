@@ -5,7 +5,7 @@
 var memosData = {
   dom:"#memos",
   listDom:"#memo-list",
-  limit:"2"
+  limit:"8"
 }
 var memosDom = document.querySelector(memosData.dom);
 
