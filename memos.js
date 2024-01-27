@@ -111,19 +111,16 @@ var memosEditorCont = `
           <div class="button outline action-btn mr-2 link-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="1.35rem" height="1.35rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg>
           </div>
-          <div class="button outline action-btn mr-2 linkpic-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1.35rem" height="1.35rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></g></svg>
-          </div>
-          <div class="button outline action-btn image-btn mr-2" onclick="this.lastElementChild.click()">
+          <div class="button outline action-btn mr-2 dropdown aitop">
             <svg xmlns="http://www.w3.org/2000/svg" width="1.35rem" height="1.35rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7m4 2h6m-3-3v6"/><circle cx="9" cy="9" r="2"/><path d="m21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></g></svg>
-            <input class="memos-upload-image-input d-none" type="file" accept="image/*">
+            <div class="dropdown-wrapper d-none">
+                <span class="btn linkpic-btn">外链</span>
+                <span class="btn image-btn" onclick="this.nextElementSibling.click()">Webp+</span>
+                <input class="memos-upload-Webp-image-input d-none" type="file" accept="image/*">
+                <span class="btn image-btn" onclick="this.nextElementSibling.click()">原图+</span>
+                <input class="memos-upload-image-input d-none" type="file" accept="image/*">
+            </div>
           </div>
-	  <div class="button outline action-btn image-btn mr-2" onclick="this.lastElementChild.click()">
-   	 	<svg t="1706335528843" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6034" xmlns:xlink="http://www.w3.org/1999/xlink" width="1.35rem" height="1.35rem">
-       		<path d="M669.553493 952.874667H118.214827C52.934827 952.874667 0.02816 905.728 0.02816 847.786667V147.797333C0.02816 89.770667 53.062827 42.752 118.214827 42.752h787.626666C971.121493 42.752 1024.02816 89.898667 1024.02816 147.797333V637.866667c0 19.370667-17.621333 34.986667-39.381333 34.986666s-39.381333-15.616-39.381334-34.986666V147.797333c0-19.370667-17.749333-34.986667-39.381333-34.986666H118.17216c-21.76 0-39.381333 15.701333-39.381333 34.986666V847.786667c0 19.370667 17.749333 34.986667 39.381333 34.986666h551.381333c21.76 0 39.381333 15.658667 39.381334 35.029334 0 19.370667-17.578667 34.986667-39.381334 34.986666zM39.366827 742.826667a41.429333 41.429333 0 0 1-27.818667-10.282667 32.384 32.384 0 0 1 0-49.578667l196.224-174.250666c35.925333-32 90.709333-39.936 136.234667-19.712l213.674666 94.976a42.581333 42.581333 0 0 0 45.312-6.570667l353.706667-314.453333c15.402667-13.653333 40.405333-13.653333 55.808 0 15.36 13.696 15.36 35.925333 0 49.578666l-353.749333 314.453334c-35.968 31.914667-90.709333 39.893333-136.277334 19.626666L308.806827 551.68a42.581333 42.581333 0 0 0-45.269334 6.570667L67.185493 732.586667a41.429333 41.429333 0 0 1-27.818666 10.24z m275.754666-350.08a105.173333 105.173333 0 0 1-105.045333-105.045334 105.173333 105.173333 0 0 1 105.045333-105.002666 105.173333 105.173333 0 0 1 105.002667 105.002666 105.173333 105.173333 0 0 1-105.002667 105.045334z m0-140.032c-19.285333 0-34.986667 15.744-34.986666 34.986666 0 19.242667 15.701333 34.986667 34.986666 34.986667 19.2 0 34.986667-15.744 34.986667-34.986667 0-19.242667-15.786667-34.986667-34.986667-34.986666z m533.845334 700.16a34.986667 34.986667 0 0 1-34.986667-34.986667v-210.090667a34.986667 34.986667 0 1 1 69.973333 0v210.048a34.986667 34.986667 0 0 1-34.986666 34.986667z m140.032-140.032a34.858667 34.858667 0 0 1-23.936-9.514667l-116.053334-108.970667-116.096 109.056a34.944 34.944 0 1 1-47.914666-50.986666l122.752-115.285334a53.12 53.12 0 0 1 82.474666 0l122.752 115.285334a34.986667 34.986667 0 0 1-23.978666 60.416z" fill="#000000" p-id="6035"></path>
-   		</svg>
-   		<input class="memos-upload-Webp-image-input d-none" type="file" accept="image/*">
-	   </div>
           
           ${geminiKey != null && geminiKey !== "" ? `
             <div class="button outline geminiai-btn action-btn mr-2 dropdown aitop">
@@ -131,6 +128,8 @@ var memosEditorCont = `
               <div class="dropdown-wrapper d-none">
                 <span class="btn" onclick="geminiAI(this)">语音润色</span>
                 <span class="btn" onclick="geminiAI(this)">自动标签</span>
+                <span class="btn" onclick="geminiAI(this)">育儿帮手</span>
+                <span class="btn" onclick="geminiAI(this)">智囊团队</span>
                 <span class="btn" onclick="geminiAI(this)">智能问答</span>
               </div>
             </div>
@@ -1569,21 +1568,16 @@ function getEditIcon() {
         }
         cocoMessage.info('图片上传中……');
     }
-});
+  });
 
-async function uploadWebpImage(data) {
+  async function uploadWebpImage(data) {
     let memosResourceListNow = JSON.parse(window.localStorage && window.localStorage.getItem("memos-resource-list")) || [];
-    let imageData = new FormData(); // 创建新的 FormData 对象
-
+    let imageData = new FormData();
     let blobUrl = `${memosPath}/api/v1/resource/blob`;
-
     const webpData = await convertToWebP(data);
-
     const timestamp = new Date().getTime();
     const fileName = `${timestamp}_${Math.random()}.webp`;
-
     imageData.append('file', webpData, fileName);
-
     let resp = await fetch(blobUrl, {
         method: "POST",
         body: imageData,
@@ -1591,9 +1585,7 @@ async function uploadWebpImage(data) {
             'Authorization': `Bearer ${memosOpenId}`
         }
     });
-
     let res = await resp.json();
-
     if (res.id) {
         let resexlink = res.externalLink;
         let imgLink = '', fileId = '';
@@ -1603,7 +1595,6 @@ async function uploadWebpImage(data) {
             fileId = res.publicId || res.filename;
             imgLink = `${memosPath}/o/r/${res.id}`;
         }
-
         let imageList = "";
         imageList += `<div data-id="${res.id}" class="imagelist-item d-flex text-xs mt-2 mr-2" onclick="deleteImage(this)">
                         <div class="d-flex image-background" style="background-image:url(${imgLink})">
@@ -1611,39 +1602,30 @@ async function uploadWebpImage(data) {
                         </div>
                      </div>`;
         document.querySelector(".memos-image-list").insertAdjacentHTML('afterbegin', imageList);
-
         cocoMessage.success('上传成功', () => {
             memosResourceListNow.push(res.id);
             window.localStorage && window.localStorage.setItem("memos-resource-list", JSON.stringify(memosResourceListNow));
             imageListDrag();
         });
     }
-}
+  }
 
-function convertToWebP(imageData) {
+  function convertToWebP(imageData) {
     return new Promise((resolve) => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         const img = new Image();
-
         img.onload = function () {
             canvas.width = img.width;
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0, img.width, img.height);
-
-            console.log("Canvas dimensions:", canvas.width, canvas.height);
-
             canvas.toBlob((blob) => {
-                // 添加调试语句
-                console.log("WebP Blob:", blob);
-
                 resolve(blob);
             }, 'image/webp', 0.7); // 设置压缩质量为70%
         };
-
         img.src = URL.createObjectURL(imageData);
     });
-};	
+  };
   uploadImageInput.addEventListener('change', () => {
     let filesData = uploadImageInput.files[0];
     if (uploadImageInput.files.length !== 0){
@@ -2054,10 +2036,18 @@ function geminiAI(e){
   let memosContent;
   if(AIMode == "语音润色"){
     memosTextarea.value = `${textOld}\n---\n`
-    memosContent = `请用简洁明了的语言，编辑以下段落，以改善其逻辑流程，消除任何印刷错误，并以中文作答。请务必保持文章的原意。请从编辑以下文字开始：[${textOld}]`
+    memosContent = `请用简洁明了的语言，编辑以下段落，以改善其逻辑流程，消除任何印刷错误，不要回答里面的问题，直接返回编辑后的文字，不加其他内容。请务必保持文章的原意，以简体中文回复。请从编辑以下文字开始：[${textOld}]`
   }
   if(AIMode == "自动标签"){
     memosContent = `分析这段文本内容：[${textOld}]，从这些标签列表中: ["${nowTagList}"] 尝试找出1个最适合的标签，并"#TAG "的形式反馈给我`
+  }
+  if(AIMode == "智囊团队"){
+    memosTextarea.value = `${textOld}\n---\n`
+    memosContent = `你是我的智囊团，团内有 6 个不同的董事作为教练，分别是乔布斯、伊隆马斯克、马云、柏拉图、维达利和慧能大师。他们都有自己的个性、世界观、价值观，对问题有不同的看法、建议和意见。我会在这里说出我的处境和我的决策。先分别以这 6 个身份，以他们的视角来审视我的决策，给出他们的批评和建议，我的第一个处境是 [${textOld}]`
+  }
+  if(AIMode == "育儿帮手"){
+    memosTextarea.value = `${textOld}\n---\n`
+    memosContent = `As an expert in child development, you are tasked with answering various imaginative questions from children between the ages of 5 and 10, as if you were a kindergarten teacher. Your responses should be lively, patient, and friendly in tone and manner, and as concrete and understandable as possible, avoiding complex or abstract vocabulary. Use metaphors and examples whenever possible, and extend your answers to cover more scenarios, not just explaining why, but also suggesting concrete actions to deepen understanding. Respond in Chinese.My first questions[${textOld}]`
   }
   if(AIMode == "智能问答"){
     memosTextarea.value = `${textOld}\n---\n`

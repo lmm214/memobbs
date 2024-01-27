@@ -362,7 +362,7 @@ blockquote {
 	color: var(--light-background);
 }
 /* Memos Editor */
-.memos-editor{padding:0;}
+.memos-editor{padding:0;position: relative;z-index: 2;}
 .memos-editor-body{display:flex;border-radius:.33rem;background-color:var(--light-background-secondary);flex-direction:column;}
 .dark .memos-editor-body{border: 1px solid var(--dark-background-hover);background-color: var(--dark-background-secondary);}
 .memos-editor-content,.memos-editor-footer,.memos-editor-option{display: flex;}
