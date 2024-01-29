@@ -2036,7 +2036,7 @@ function geminiAI(e){
   let memosContent;
   if(AIMode == "语音润色"){
     memosTextarea.value = `${textOld}\n---\n`
-    memosContent = `请用简洁明了的语言，编辑以下段落，以改善其逻辑流程，消除任何印刷错误。请务必保持文章的原意，禁止回答解释文字里的问题，以简体中文回复。请从编辑以下文字开始：[${textOld}]`
+    memosContent = `请用简洁明了的语言，编辑以下段落，以改善其逻辑流程，消除任何印刷错误。请务必保持文章的原意，禁止回答解释文字里的问题，只返回编辑后的文字，以简体中文回复。请从编辑以下文字开始：[${textOld}]`
   }
   if(AIMode == "自动标签"){
     memosContent = `分析这段文本内容：[${textOld}]，从这些标签列表中: ["${nowTagList}"] 尝试找出1个最适合的标签，并"#TAG "的形式反馈给我`
@@ -2053,7 +2053,6 @@ function geminiAI(e){
     memosTextarea.value = `${textOld}\n---\n`
     memosContent = `${textOld}`
   }
-  //console.log(memosContent)
   if(!textOld){
     cocoMessage.info('内容不能为空');
   }else{
