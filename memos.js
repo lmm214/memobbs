@@ -1,5 +1,5 @@
 /**
- * memos.js 24.1.22
+ * memos.js 24.1.29
  * https://immmmm.com/
  */
 var memosData = {
@@ -2034,35 +2034,32 @@ function geminiAI(e){
   let AIMode = e.innerText
   let textOld = memosTextarea.value
   let memosContent;
+  if(!textOld){
+    cocoMessage.info('内容不能为空');
+    return
+  }
   if(AIMode == "语音润色"){
     memosTextarea.value = `${textOld}\n---\n`
     memosContent = `请用简洁明了的语言，编辑以下段落，以改善其逻辑流程，消除任何印刷错误。请务必保持文章的原意，禁止回答解释文字里的问题，只返回编辑后的文字，以简体中文回复。请从编辑以下文字开始：[${textOld}]`
-  }
-  if(AIMode == "自动标签"){
+  }else if(AIMode == "自动标签"){
     memosContent = `分析这段文本内容：[${textOld}]，从这些标签列表中: ["${nowTagList}"] 尝试找出1个最适合的标签，并"#TAG "的形式反馈给我`
-  }
-  if(AIMode == "智囊团队"){
+  }else if(AIMode == "智囊团队"){
     memosTextarea.value = `${textOld}\n---\n`
     memosContent = `你是我的智囊团，团内有 6 个不同的董事作为教练，分别是乔布斯、伊隆马斯克、马云、柏拉图、维达利和慧能大师。他们都有自己的个性、世界观、价值观，对问题有不同的看法、建议和意见。我会在这里说出我的处境和我的决策。先分别以这 6 个身份，以他们的视角来审视我的决策，给出他们的批评和建议，我的第一个处境是 [${textOld}]`
-  }
-  if(AIMode == "育儿帮手"){
+  }else if(AIMode == "育儿帮手"){
     memosTextarea.value = `${textOld}\n---\n`
     memosContent = `As an expert in child development, you are tasked with answering various imaginative questions from children between the ages of 5 and 10, as if you were a kindergarten teacher. Your responses should be lively, patient, and friendly in tone and manner, and as concrete and understandable as possible, avoiding complex or abstract vocabulary. Use metaphors and examples whenever possible, and extend your answers to cover more scenarios, not just explaining why, but also suggesting concrete actions to deepen understanding. Respond in Chinese.My first questions: [${textOld}]`
-  }
-  if(AIMode == "智能问答"){
+  }else if(AIMode == "智能问答"){
     memosTextarea.value = `${textOld}\n---\n`
     memosContent = `${textOld}`
   }
-  if(!textOld){
-    cocoMessage.info('内容不能为空');
-  }else{
-    geminiAIBtn.classList.add("d-none","noclick")
-    geminiAILoadBtn.classList.remove("d-none")
-    sendToGemini(memosContent)
-  }
+  geminiAIBtn.classList.add("d-none","noclick")
+  geminiAILoadBtn.classList.remove("d-none")
+  sendToGemini(memosContent)
 };
 
-let GeminiFetch = "https://gemini-openai-proxy.deno.dev/v1/chat/completions"
+let GeminiFetch = "https://lmm-api-gemini.deno.dev/v1/chat/completions"
+//"https://gemini-openai-proxy.deno.dev/v1/chat/completions"
 async function sendToGemini(memosContent) {
   const res = await fetch(GeminiFetch, {
     headers: {
@@ -2077,10 +2074,7 @@ async function sendToGemini(memosContent) {
       stream: true
     })
   })
-  if(res.ok){
-    geminiAIBtn.classList.remove("d-none","noclick")
-    geminiAILoadBtn.classList.add("d-none")
-  }else{
+  if(!res.ok){
     setTimeout(function() {
       geminiAIBtn.classList.remove("d-none","noclick")
       geminiAILoadBtn.classList.add("d-none")
@@ -2091,13 +2085,15 @@ async function sendToGemini(memosContent) {
   while(true) {
     const {value, done} = await reader.read()
     if (done) {
+      geminiAIBtn.classList.remove("d-none","noclick")
+      geminiAILoadBtn.classList.add("d-none")
       break
     }
     const text = new TextDecoder().decode(value)
     const match = text.match(/DONE/)
     //console.log(match)
     if(!match){
-      console.log(text.substring(5))
+      //console.log(text.substring(5))
       const textJson = JSON.parse(text.substring(5))
       const resData = textJson.choices[0].delta.content
       if(resData.length > 0){
