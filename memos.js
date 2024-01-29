@@ -115,7 +115,7 @@ var memosEditorCont = `
             <svg xmlns="http://www.w3.org/2000/svg" width="1.35rem" height="1.35rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7m4 2h6m-3-3v6"/><circle cx="9" cy="9" r="2"/><path d="m21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></g></svg>
             <div class="dropdown-wrapper d-none">
                 <span class="btn linkpic-btn">外链</span>
-                <span class="btn image-btn" onclick="this.nextElementSibling.click()">Webp+</span>
+                <span class="btn image-btn" onclick="this.nextElementSibling.click()">WebP+</span>
                 <input class="memos-upload-Webp-image-input d-none" type="file" accept="image/*">
                 <span class="btn image-btn" onclick="this.nextElementSibling.click()">原图+</span>
                 <input class="memos-upload-image-input d-none" type="file" accept="image/*">
@@ -1566,7 +1566,7 @@ function getEditIcon() {
         for (let i = 0; i < filesData.length; i++) {
             uploadWebpImage(filesData[i]);
         }
-        cocoMessage.info('图片上传中……');
+        cocoMessage.info('压缩并上传中……');
     }
   });
 
@@ -1612,18 +1612,18 @@ function getEditIcon() {
 
   function convertToWebP(imageData) {
     return new Promise((resolve) => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = new Image();
-        img.onload = function () {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0, img.width, img.height);
-            canvas.toBlob((blob) => {
-                resolve(blob);
-            }, 'image/webp', 0.7); // 设置压缩质量为70%
-        };
-        img.src = URL.createObjectURL(imageData);
+      const img = new Image();
+      img.onload = function () {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, img.width, img.height);
+          canvas.toBlob((blob) => {
+              resolve(blob);
+          }, 'image/webp', 0.7); // 设置压缩质量为70%
+      };
+      img.src = URL.createObjectURL(imageData);
     });
   };
   uploadImageInput.addEventListener('change', () => {
