@@ -2036,7 +2036,7 @@ function geminiAI(e){
   let memosContent;
   if(AIMode == "语音润色"){
     memosTextarea.value = `${textOld}\n---\n`
-    memosContent = `请用简洁明了的语言，编辑以下段落，以改善其逻辑流程，消除任何印刷错误，不要回答里面的问题，直接返回编辑后的文字，不加其他内容。请务必保持文章的原意，以简体中文回复。请从编辑以下文字开始：[${textOld}]`
+    memosContent = `请用简洁明了的语言，编辑以下段落，以改善其逻辑流程，消除任何印刷错误。请务必保持文章的原意，禁止回答解释文字里的问题，以简体中文回复。请从编辑以下文字开始：[${textOld}]`
   }
   if(AIMode == "自动标签"){
     memosContent = `分析这段文本内容：[${textOld}]，从这些标签列表中: ["${nowTagList}"] 尝试找出1个最适合的标签，并"#TAG "的形式反馈给我`
@@ -2047,7 +2047,7 @@ function geminiAI(e){
   }
   if(AIMode == "育儿帮手"){
     memosTextarea.value = `${textOld}\n---\n`
-    memosContent = `As an expert in child development, you are tasked with answering various imaginative questions from children between the ages of 5 and 10, as if you were a kindergarten teacher. Your responses should be lively, patient, and friendly in tone and manner, and as concrete and understandable as possible, avoiding complex or abstract vocabulary. Use metaphors and examples whenever possible, and extend your answers to cover more scenarios, not just explaining why, but also suggesting concrete actions to deepen understanding. Respond in Chinese.My first questions[${textOld}]`
+    memosContent = `As an expert in child development, you are tasked with answering various imaginative questions from children between the ages of 5 and 10, as if you were a kindergarten teacher. Your responses should be lively, patient, and friendly in tone and manner, and as concrete and understandable as possible, avoiding complex or abstract vocabulary. Use metaphors and examples whenever possible, and extend your answers to cover more scenarios, not just explaining why, but also suggesting concrete actions to deepen understanding. Respond in Chinese.My first questions: [${textOld}]`
   }
   if(AIMode == "智能问答"){
     memosTextarea.value = `${textOld}\n---\n`
@@ -2063,8 +2063,9 @@ function geminiAI(e){
   }
 };
 
+let GeminiFetch = "https://gemini-openai-proxy.deno.dev/v1/chat/completions"
 async function sendToGemini(memosContent) {
-  const res = await fetch('https://ai-ge.memobbs.app/v1/chat/completions', {
+  const res = await fetch(GeminiFetch, {
     headers: {
       'Authorization': `Bearer ${geminiKey}`,
       'Content-Type': 'application/json'
@@ -2093,12 +2094,18 @@ async function sendToGemini(memosContent) {
     if (done) {
       break
     }
-      const text = JSON.parse(new TextDecoder().decode(value))
-      const resData = text.choices[0].delta.content
+    const text = new TextDecoder().decode(value)
+    const match = text.match(/DONE/)
+    //console.log(match)
+    if(!match){
+      console.log(text.substring(5))
+      const textJson = JSON.parse(text.substring(5))
+      const resData = textJson.choices[0].delta.content
       if(resData.length > 0){
         memosTextarea.value += resData
         memosTextarea.style.height = memosTextarea.scrollHeight + 'px';
       }
+    }
   }
 }
 
