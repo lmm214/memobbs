@@ -661,7 +661,7 @@ button{margin-bottom:0 !important;}
 button.button-load{width:98%;margin:0 auto;}
 buttom.cancel-edit-btn{margin-left:-1rem;}
 /*db-card*/
-.db-card{margin:2rem 3rem;background:#fafafa;box-shadow: 0 1px 2px rgb(0 0 0 / 25%), 0 0 1px rgb(0 0 0 / 25%);border-radius:0 !important;}
+.db-card{margin:2rem 3rem;background-color:var(--dark-color);box-shadow: 0 1px 2px rgb(0 0 0 / 25%), 0 0 1px rgb(0 0 0 / 25%);border-radius:0 !important;}
 .db-card-subject{display: flex;align-items:flex-start;line-height:1.6;padding:12px;position:relative;}
 .dark .db-card{background:#252627;}
 .db-card-content {flex:1 1 auto;}
@@ -682,8 +682,8 @@ buttom.cancel-edit-btn{margin-left:-1rem;}
 	.gohome-memos,.editor-selector{margin-right: .5rem !important;}
 	.edit-memos-btn{padding-right:1rem !important;padding-left:1rem !important;}
 }
-.db-card{box-shadow: none;margin:-10px -1rem 10px;}
-.dark .db-card{background:#252627;}
+.db-card{box-shadow: none;margin:0 -1rem 10px;}
+.dark .db-card{background-color:var(--light-color-third)}
 /* db-card -------- end */
 .user-now{overflow: hidden;}
 .user-now .row-fill{display:flex;align-items:center;margin-left:auto;}
