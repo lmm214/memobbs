@@ -150,7 +150,7 @@ var memosEditorCont = `
       </div>
       <div class="memos-editor-footer border-t mt-2 pt-2 flex-wrap">
         <div class="d-flex">
-          <div class="button outline switchUser-btn d-none d-md-flex mr-2 p-2">
+          <div class="button outline switchUser-btn mr-2 p-2">
             <svg xmlns="http://www.w3.org/2000/svg" width=".9rem" height=".9rem" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M20 7h-9m3 10H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></g></svg>
           </div>
           <div class="button outline private-btn mr-2 p-2">
@@ -171,7 +171,7 @@ var memosEditorCont = `
             </select>
           </div>
           <div class="edit-memos d-none">
-            <button class="outline cancel-edit-btn mr-3 px-3 py-2" title="取消">取消</button>
+            <button class="outline cancel-edit-btn mr-2 px-2 py-2" title="取消">取消</button>
             <button class="primary edit-memos-btn px-5 py-2" title="保存">保存</button>
           </div>
           <button class="primary submit-memos-btn px-5 py-2" title="记下">记下</button>
@@ -978,6 +978,7 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
 
     if (link == memosPath) {
       try {
+
         let response = await fetch(userMemoUrl,{
             headers: {
               'Authorization': `Bearer ${memosOpenId}`,
@@ -990,9 +991,9 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
           let data = await response.json();
           let oneDayTag = window.localStorage && window.localStorage.getItem("memos-oneday-tag");
           let oneDayTagCount = window.localStorage && window.localStorage.getItem("memos-oneday-count");
-          if( oneDayTag !== null && oneDayTagCount !== null && search == ""){
+          if( oneDayTag !== null && oneDayTagCount !== null && !search ){
             let randomOneNum = Math.floor(Math.random() * oneDayTagCount)
-            let oneDayUrl = `${memosPath}/api/v1/memo?tag=${oneDayTag}&limit=1&offset=${randomOneNum}`
+            let oneDayUrl = `${link}/api/v1/memo?tag=${oneDayTag}&limit=1&offset=${randomOneNum}`
             //console.log(oneDayUrl)
             try {
               let responseOne = await fetch(oneDayUrl,{
