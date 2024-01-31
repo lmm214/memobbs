@@ -522,7 +522,8 @@ async function updateHtml(data) {
     LINE_REG = /\n/g,
     BLOCKQUDTE_REG = /\>.*$/g,
     CODE_REG = /\```.*$/g,
-    DEODB_LINK_REG = /(https:\/\/(www|movie|book)\.douban\.com\/(game|subject)\/[0-9]+\/).*?/g,
+    DOUDB_LINK_REG = /(https:\/\/(www|movie|book)\.douban\.com\/(game|subject)\/[0-9]+\/).*?/g,
+    NEODB_LINK_REG = /(https:\/\/neodb\.social\/(game|movie|tv|book)\/[0-9a-zA-Z]+)/g,//https://neodb.social/movie/2jGT1CtdgHPjirJj3bb0PA
     BILIBILI_REG = /<a.*?href="https:\/\/www\.bilibili\.com\/video\/((av[\d]{1,10})|(BV([\w]{10})))\/?".*?>.*<\/a>/g,
     NETEASE_MUSIC_REG = /<a.*?href="https:\/\/music\.163\.com\/.*id=([0-9]+)".*?>.*<\/a>/g,
     QQMUSIC_REG = /<a.*?href="https\:\/\/y\.qq\.com\/.*(\/[0-9a-zA-Z]+)(\.html)?".*?>.*?<\/a>/g,
@@ -553,7 +554,8 @@ async function updateHtml(data) {
     let memosRes = memo.content
       .replace(TAG_REG, "")
       .replace(IMG_REG, "")
-      .replace(DEODB_LINK_REG, "")
+      .replace(DOUDB_LINK_REG, "")
+      .replace(NEODB_LINK_REG, "")
       .replace(LINK_REG, `<a class='primary' href='$2' target='_blank'>$1</a>`)
       memosRes = marked.parse(memosRes)
       .replace(BILIBILI_REG, `<div class='video-wrapper'><iframe src='//www.bilibili.com/blackboard/html5mobileplayer.html?bvid=$1&as_wide=1&high_quality=1&danmaku=0' scrolling='no' border='0' frameborder='no' framespacing='0' allowfullscreen='true'></iframe></div>`)
@@ -573,12 +575,20 @@ async function updateHtml(data) {
         let memosImg = imgStr.replace(IMG_REG, `<div class="memo-resource width-100"><img class="lozad" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="$2"></div>`)
         memosRes += `<div class="resource-wrapper"><div class="images-wrapper my-2">${memosImg}</div></div>`
     }
-    // NeoDB
-    let neodbArr = memo.content.match(DEODB_LINK_REG);
+    // DoubanDB
+    let doudbArr = memo.content.match(DOUDB_LINK_REG);
+    let doudbDom = '';
+    if(doudbArr){
+      for(let k=0;k < doudbArr.length;k++){
+        doudbDom += await fetchNeoDB(doudbArr[k],"douban")
+      }
+    }
+    // DoubanDB
+    let neodbArr = memo.content.match(NEODB_LINK_REG);
     let neodbDom = '';
     if(neodbArr){
       for(let k=0;k < neodbArr.length;k++){
-        neodbDom += await fetchNeoDB(neodbArr[k])
+        neodbDom += await fetchNeoDB(neodbArr[k],"neodb")
       }
     }
     //标签
@@ -1084,8 +1094,13 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
     });
 }
 // Fetch NeoDB
-async function fetchNeoDB(url){
-  let urlNow = "https://api-neodb.immmmm.com/?url="+url
+async function fetchNeoDB(url,mode){
+  let urlNow;
+  if(mode == "douban"){
+    urlNow = "https://api-neodb.immmmm.com/?url="+url
+  }else if(mode = "neodb"){
+    urlNow = url.replace("social/movie","social/api/movie")
+  }
   let response = await fetch(urlNow);
   let dbFetch = await response.json();
   let neodbDom = `<div class="db-card">
