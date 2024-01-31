@@ -1099,7 +1099,7 @@ async function fetchNeoDB(url,mode){
   if(mode == "douban"){
     urlNow = "https://api-neodb.immmmm.com/?url="+url
   }else if(mode = "neodb"){
-    urlNow = url.replace("social/movie","social/api/movie")
+    urlNow = url.replace("social/","social/api/")
   }
   let response = await fetch(urlNow);
   let dbFetch = await response.json();
