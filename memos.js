@@ -837,12 +837,11 @@ function myFeedsXML(e){
       });
       var myFeedArticle = '';
       for (var i = 0;i<20;i++){
-        let randomColor = getRandomColor();
         let item = entries[i];
         myFeedArticle +=`
         <div class="card-item flex-fill p-3">
           <div class="d-flex flex-fill">
-            <div class="item-avatar mr-2 face" style="background-color:${randomColor}">${item.creator.charAt(0)}</div>
+            <div class="item-avatar mr-2 face" style="background-image:url('https://favicon.memobbs.app?url=${item.link}')"></div>
             <div class="item-sub d-flex flex-column p-1">
               <div class="item-creator"><a href="${item.link}" target="_blank" rel="noopener nofollow" >${item.title}</a></div>
               <span class="myfeeds-floor">${i+1}</span>
@@ -870,12 +869,11 @@ function myFeedsXML(e){
       });
       var myFeedArticle = '';
       for (var i = 0;i<15;i++){
-        let randomColor = getRandomColor();
         let item = entries[i];
         myFeedArticle +=`
         <div class="card-item flex-fill p-3">
           <div class="d-flex flex-fill">
-            <div class="item-avatar mr-2 face" style="background-color:${randomColor}">${item.creator}</div>
+            <div class="item-avatar mr-2 face" style="background-image:url('https://favicon.memobbs.app?url=${item.link}')"></div>
             <div class="item-sub d-flex flex-column p-1">
               <div class="item-creator"><a href="${item.link}" target="_blank" rel="noopener nofollow" >${item.title}</a></div>
               <span class="myfeeds-floor">${i+1}</span>
@@ -902,12 +900,11 @@ function myFeedsXML(e){
         };
       });
       for (var i = 0;i<20;i++){
-        let randomColor = getRandomColor();
         let item = entries[i];
         myFeedArticle +=`
         <div class="card-item flex-fill p-3">
           <div class="d-flex flex-fill">
-            <div class="item-avatar mr-2 face" style="background-color:${randomColor}">${item.creator.charAt(0)}</div>
+            <div class="item-avatar mr-2 face" style="background-image:url('https://favicon.memobbs.app?url=${item.link}')"></div>
             <div class="item-sub d-flex flex-column p-1">
               <div class="item-creator"><a href="${item.link}" target="_blank" rel="noopener nofollow" >${item.title}</a></div>
               <span class="myfeeds-floor">${i+1}</span>
@@ -945,16 +942,6 @@ function myFeedsXML(e){
     });
   }
 }
-
-function getRandomColor() {
-  const letters = '01234567ABCD';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 12)];
-  }
-  return color;
-}
-
 
 //标签筛选且输入框为空，自动插入标签
 memosTextarea.addEventListener('focus', function(event) {
@@ -994,7 +981,7 @@ function searchNow(serchText){
     let usernowName = document.querySelector(".user-now-name").innerHTML;
     let serchDom = `
       <div class="memos-tagnow row p-2 mb-2">
-        <div class="memos-tagnow-title mr-3">当前搜索:</div>
+        <div class="memos-tagnow-title mr-3">当前搜索b:</div>
         <div class="memos-tagnow-name card-item pr-2 pl-2" onclick="reloadUser('search')">${serchText}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-auto ml-1 opacity-40"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></div>
       </div>`
     memosDom.insertAdjacentHTML('beforebegin', serchDom);
