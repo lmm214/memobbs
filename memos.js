@@ -799,13 +799,162 @@ myFeedsBtn.addEventListener('click', function(event) {
       </div>
       `;
     }
-    memoDom.innerHTML = `<div class="myfeeds">${myFeedArticle}</div>`;
-    //相对时间
+    memoDom.innerHTML = `<div class="myfeeds-option row px-2 pb-2">
+      <div class="myfeeds-xml card-item px-3 py-2 mr-3" data-type="bfind" onclick="myFeedsXML(this)">BlogFinder</div>
+      <div class="myfeeds-xml card-item px-3 py-2 mr-3" data-type="jixin"  onclick="myFeedsXML(this)">积薪</div>
+      <div class="myfeeds-xml card-item px-3 py-2 mr-3" data-type="boyou"  onclick="myFeedsXML(this)">博友圈</div>
+      <div class="myfeeds-xml card-item px-3 py-2 mr-3" data-type="shinian"  onclick="myFeedsXML(this)">十年之约</div>
+    </div>
+    <div class="myfeeds">${myFeedArticle}</div>`;
     window.Lately && Lately.init({
       target: '.item-mate'
     });
   })
 });
+
+function myFeedsXML(e){
+  loadBtn.classList.add('d-none');
+  let myfeedsDom = document.querySelector(".myfeeds")
+  document.querySelectorAll('.myfeeds-xml').forEach((item) => {
+    item.classList.add('noclick');
+    item.classList.remove('current');
+  })
+  e.classList.add("current")
+  let type = e.getAttribute("data-type")
+  myfeedsDom.innerHTML = ""
+  let myFeedArticle = '',entries;
+  myfeedsDom.innerHTML = skeleton;
+  if(type=="bfind"){
+    fetch('https://cors.memobbs.app/https://bf.zzxworld.com/feed.xml').then(response => response.text()).then(str => new window.DOMParser().parseFromString(str, 'text/xml'))
+    .then(data => {
+      entries = Array.from(data.querySelectorAll('entry')).map(entry => {
+        return {
+          title: entry.querySelector('title').textContent,
+          link: entry.querySelector('link').getAttribute('href'),
+          published: entry.querySelector('published').textContent,
+          creator: entry.querySelector('author name').textContent
+        };
+      });
+      var myFeedArticle = '';
+      for (var i = 0;i<20;i++){
+        let randomColor = getRandomColor();
+        let item = entries[i];
+        myFeedArticle +=`
+        <div class="card-item flex-fill p-3">
+          <div class="d-flex flex-fill">
+            <div class="item-avatar mr-2 face" style="background-color:${randomColor}">${item.creator.charAt(0)}</div>
+            <div class="item-sub d-flex flex-column p-1">
+              <div class="item-creator"><a href="${item.link}" target="_blank" rel="noopener nofollow" >${item.title}</a></div>
+              <span class="myfeeds-floor">${i+1}</span>
+              <div class="item-mate mt-2 text-xs">${item.published}</div>
+            </div>
+          </div>
+        </div>
+        `;
+        myfeedsDom.innerHTML = myFeedArticle
+      }
+      document.querySelectorAll('.myfeeds-xml').forEach((item) => {item.classList.remove('noclick');})
+      window.Lately && Lately.init({target: '.item-mate'});
+    });
+  }
+  if(type=="jixin"){
+    fetch("https://cors.memobbs.app/https://firewood.news/rss.xml").then(response => response.text()).then(str => new window.DOMParser().parseFromString(str, 'text/xml'))
+    .then(data => {
+      entries = Array.from(data.querySelectorAll('item')).map(entry => {
+        return {
+          title: entry.querySelector('title').textContent,
+          link: entry.querySelector('link').textContent,
+          published: entry.querySelector('pubDate').textContent,
+          creator: entry.querySelector('author').textContent.charAt(0)
+        };
+      });
+      var myFeedArticle = '';
+      for (var i = 0;i<15;i++){
+        let randomColor = getRandomColor();
+        let item = entries[i];
+        myFeedArticle +=`
+        <div class="card-item flex-fill p-3">
+          <div class="d-flex flex-fill">
+            <div class="item-avatar mr-2 face" style="background-color:${randomColor}">${item.creator}</div>
+            <div class="item-sub d-flex flex-column p-1">
+              <div class="item-creator"><a href="${item.link}" target="_blank" rel="noopener nofollow" >${item.title}</a></div>
+              <span class="myfeeds-floor">${i+1}</span>
+              <div class="item-mate mt-2 text-xs">${item.published}</div>
+            </div>
+          </div>
+        </div>
+        `;
+        myfeedsDom.innerHTML = myFeedArticle
+      }
+      document.querySelectorAll('.myfeeds-xml').forEach((item) => {item.classList.remove('noclick');})
+      window.Lately && Lately.init({target: '.item-mate'});
+    });
+  }
+  if(type=="boyou"){
+    fetch("https://www.boyouquan.com/feed.xml").then(response => response.text()).then(str => new window.DOMParser().parseFromString(str, 'text/xml'))
+    .then(data => {
+      entries = Array.from(data.querySelectorAll('item')).map(entry => {
+        return {
+          title: entry.querySelector('title').textContent,
+          link: decodeURIComponent(entry.querySelector('link').textContent.replace('https://www.boyouquan.com/go?from=feed&link=',"")),
+          published: entry.getElementsByTagName('dc:date')[0].textContent,
+          creator: entry.getElementsByTagName('dc:creator')[0].textContent
+        };
+      });
+      for (var i = 0;i<20;i++){
+        let randomColor = getRandomColor();
+        let item = entries[i];
+        myFeedArticle +=`
+        <div class="card-item flex-fill p-3">
+          <div class="d-flex flex-fill">
+            <div class="item-avatar mr-2 face" style="background-color:${randomColor}">${item.creator.charAt(0)}</div>
+            <div class="item-sub d-flex flex-column p-1">
+              <div class="item-creator"><a href="${item.link}" target="_blank" rel="noopener nofollow" >${item.title}</a></div>
+              <span class="myfeeds-floor">${i+1}</span>
+              <div class="item-mate mt-2 text-xs">${item.published}</div>
+            </div>
+          </div>
+        </div>
+        `;
+        myfeedsDom.innerHTML = myFeedArticle
+      }
+      document.querySelectorAll('.myfeeds-xml').forEach((item) => {item.classList.remove('noclick');})
+      window.Lately && Lately.init({target: '.item-mate'});
+    });
+  }
+  if(type=="shinian"){
+    fetch("https://www.foreverblog.cn/api/v1/blog/feeds?page=1").then(res => res.json()).then(resdata =>{
+      for (var i = 0;i<20;i++){
+        let item = resdata.data.data[i];
+        myFeedArticle +=`
+        <div class="card-item flex-fill p-3">
+          <div class="d-flex flex-fill">
+            <div class="item-avatar mr-2" style="background-image:url(https://gravatar.loli.net/avatar/${item.email})"></div>
+            <div class="item-sub d-flex flex-column p-1">
+              <div class="item-creator"><a href="${item.link}" target="_blank" rel="noopener nofollow" >${item.title}</a></div>
+              <span class="myfeeds-floor">${i+1}</span>
+              <div class="item-mate mt-2 text-xs">${item.created_at}</div>
+            </div>
+          </div>
+        </div>
+        `;
+        myfeedsDom.innerHTML = myFeedArticle
+      }
+      document.querySelectorAll('.myfeeds-xml').forEach((item) => {item.classList.remove('noclick');})
+      window.Lately && Lately.init({target: '.item-mate'});
+    });
+  }
+}
+
+function getRandomColor() {
+  const letters = '01234567ABCD';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 12)];
+  }
+  return color;
+}
+
 
 //标签筛选且输入框为空，自动插入标签
 memosTextarea.addEventListener('focus', function(event) {
@@ -1000,7 +1149,6 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
 
     if (link == memosPath) {
       try {
-
         let response = await fetch(userMemoUrl,{
             headers: {
               'Authorization': `Bearer ${memosOpenId}`,
