@@ -341,7 +341,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function getMemoListData(url) {
   const response = await fetch(url);
   const data = await response.json();
-  let namesToRemove = filterName.split(',');
+  let namesToRemove = filterName.replace(/，/g, ",").split(',');
   for (let name of namesToRemove) {
   let nameIndex = data.myMemoList.findIndex(item => (item.creatorName == name));
     if (nameIndex !== -1) {
