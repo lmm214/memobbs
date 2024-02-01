@@ -1,5 +1,5 @@
 /**
- * memos.js 24.1.29
+ * memos.js 24.2.1
  * https://immmmm.com/
  */
 var memosData = {
@@ -85,6 +85,7 @@ var memosMeArtalkSite = window.localStorage && window.localStorage.getItem("memo
 var memosMeTwikoo = window.localStorage && window.localStorage.getItem("memos-twikoo-input");
 let cfwkAiUrl = window.localStorage && window.localStorage.getItem("memos-cfwkai-url")
 let geminiKey = window.localStorage && window.localStorage.getItem("memos-gemini-key")
+let filterName = window.localStorage && window.localStorage.getItem("memos-filter-name")
 
 var memosEditorCont = `
 <div class="memos-editor animate__animated animate__fadeIn col-12 d-none">
@@ -187,6 +188,7 @@ var memosEditorCont = `
         <input name="twikoo-path-url" class="memos-twikoo-input border-b input-text col-6 py-2" type="text" value="${memosMeTwikoo ? memosMeTwikoo : ''}" placeholder="[可选]Twikoo 评论网址">
         <input name="cfwkai-url" class="cfwkai-url-input border-b input-text col-6 py-2" type="text" value="${cfwkAiUrl ? cfwkAiUrl : ''}" placeholder="[可选]Cloudflare AI 网址">
         <input name="gemini-key" class="gemini-key-input border-b input-text col-6 py-2" type="text" value="${geminiKey ? geminiKey : ''}" placeholder="[可选]Gemini Pro Key">
+        <input name="filter-name" class="filter-name-input border-b input-text col-6 py-2" type="text" value="${filterName ? filterName : ''}" placeholder="[可选]广场过滤名单（ , 分隔多个）">
       </div>
       <button class="primary submit-openapi-btn px-5 py-2">保存</button>
     </div>
@@ -229,6 +231,7 @@ var artalkSiteInput = document.querySelector(".memos-artalksite-input");
 var twikooInput = document.querySelector(".memos-twikoo-input");
 var cfwkAiUrlInput = document.querySelector(".cfwkai-url-input");
 var geminiKeyInput = document.querySelector(".gemini-key-input");
+var filterNameInput = document.querySelector(".filter-name-input");
 var uploadImageInput = document.querySelector(".memos-upload-image-input");
 //Webp格式
 var uploadWebpImageInput = document.querySelector(".memos-upload-Webp-image-input");
@@ -325,7 +328,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     });
   }
-  
+
   nowLink = memosPath || memoList[0].link;
   nowId = memosMeID || memoList[0].creatorId;
   nowName = memosMeNickname || memoList[0].creatorName;
@@ -338,6 +341,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function getMemoListData(url) {
   const response = await fetch(url);
   const data = await response.json();
+  let namesToRemove = filterName.split(',');
+  for (let name of namesToRemove) {
+  let nameIndex = data.myMemoList.findIndex(item => (item.creatorName == name));
+    if (nameIndex !== -1) {
+      delete data.myMemoList.splice(nameIndex, 1);
+    }
+  };
   return data.myMemoList
 }
 
@@ -1709,6 +1719,7 @@ function getEditIcon() {
       if(twikooInput.value !== null || twikooInput.value !== '') window.localStorage && window.localStorage.setItem("memos-twikoo-input", twikooInput.value);
       if(cfwkAiUrlInput.value !== null || cfwkAiUrlInput.value !== '') window.localStorage && window.localStorage.setItem("memos-cfwkai-url", cfwkAiUrlInput.value);
       if(geminiKeyInput.value !== null || geminiKeyInput.value !== '') window.localStorage && window.localStorage.setItem("memos-gemini-key", geminiKeyInput.value);
+      if(filterNameInput.value !== null || filterNameInput.value !== '') window.localStorage && window.localStorage.setItem("memos-filter-name", filterNameInput.value);
     }
   });
 
