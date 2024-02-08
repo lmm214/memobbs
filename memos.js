@@ -535,7 +535,7 @@ async function updateHtml(data) {
     BLOCKQUDTE_REG = /\>.*$/g,
     CODE_REG = /\```.*$/g,
     DOUDB_LINK_REG = /(https:\/\/(www|movie|book)\.douban\.com\/(game|subject)\/[0-9]+\/).*?/g,
-    NEODB_LINK_REG = /(https:\/\/neodb\.social\/(game|movie|tv|book)\/[0-9a-zA-Z]+)/g,//https://neodb.social/movie/2jGT1CtdgHPjirJj3bb0PA
+    NEODB_LINK_REG = /(https:\/\/neodb\.social\/(game|movie|tv\/season|book)\/[0-9a-zA-Z]+)(?= )/g,
     BILIBILI_REG = /<a.*?href="https:\/\/www\.bilibili\.com\/video\/((av[\d]{1,10})|(BV([\w]{10})))\/?".*?>.*<\/a>/g,
     NETEASE_MUSIC_REG = /<a.*?href="https:\/\/music\.163\.com\/.*id=([0-9]+)".*?>.*<\/a>/g,
     QQMUSIC_REG = /<a.*?href="https\:\/\/y\.qq\.com\/.*(\/[0-9a-zA-Z]+)(\.html)?".*?>.*?<\/a>/g,
@@ -589,18 +589,17 @@ async function updateHtml(data) {
     }
     // DoubanDB
     let doudbArr = memo.content.match(DOUDB_LINK_REG);
-    let doudbDom = '';
+    let neodbDom = '';
     if(doudbArr){
       for(let k=0;k < doudbArr.length;k++){
-        doudbDom += await fetchNeoDB(doudbArr[k],"douban")
+        neodbDom += await fetchNeoDB(doudbArr[k],"douban")
       }
     }
     // DoubanDB
     let neodbArr = memo.content.match(NEODB_LINK_REG);
-    let neodbDom = '';
     if(neodbArr){
-      for(let k=0;k < neodbArr.length;k++){
-        neodbDom += await fetchNeoDB(neodbArr[k],"neodb")
+      for(let l=0;l < neodbArr.length;l++){
+        neodbDom += await fetchNeoDB(neodbArr[l],"neodb")
       }
     }
     //标签
@@ -1246,6 +1245,8 @@ async function fetchNeoDB(url,mode){
   if(mode == "douban"){
     urlNow = "https://api-neodb.immmmm.com/?url="+url
   }else if(mode = "neodb"){
+
+    console.log(url)
     urlNow = url.replace("social/","social/api/")
   }
   let response = await fetch(urlNow);
