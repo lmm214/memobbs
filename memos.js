@@ -1,5 +1,5 @@
 /**
- * memos.js 24.2.1
+ * memos.js 24.2.9
  * https://immmmm.com/
  */
 var memosData = {
@@ -633,7 +633,7 @@ async function updateHtml(data) {
           resImgLength = resImgLength + 1
         }
         if (restype == 'video') {
-          resUrl += `<video style="width:100%;" crossorigin="anonymous" src="${imgLink}" controls=""></video>`
+          resUrl += `<video style="width:100%;max-height:50vh;" crossorigin="anonymous" src="${imgLink}" controls=""></video>`
         }
         if (restype !== 'video' && restype !== 'image') {
           resUrl += `<a class="memos-tag p-1" target="_blank" rel="noreferrer" href="${imgLink}">${resourceList[j].filename}</a>`;
