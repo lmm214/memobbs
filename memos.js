@@ -627,8 +627,8 @@ async function updateHtml(data) {
         if (resexlink) {
             imgLink = resexlink
         } else {
-            fileId = resourceList[j].publicId || resourceList[j].filename
-            imgLink = `${memo.link}/o/r/${resourceList[j].id}`;///${fileId}
+            fileId = `${resourceList[j].name}?thumbnail=1` || `${resourceList[j].id}`;
+            imgLink = `${memo.link}/o/r/${fileId}`;
         }
         if (restype == 'image') {
           imgUrl += `<div class="memo-resource w-100"><img class="lozad" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="${imgLink}"/></div>`;
