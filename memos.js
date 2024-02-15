@@ -1320,7 +1320,7 @@ function loadArtalk(e) {
     }
     artalkDom.insertAdjacentHTML('beforeend', artalkCon);
     artalkDom.classList.remove('d-none');
-    const artalk = Artalk.init({
+    Artalk.init({
       el: '#artalk',
       pageKey: '/m/' + artalkId,
       pageTitle: '',
