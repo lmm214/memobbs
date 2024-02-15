@@ -433,16 +433,11 @@ function memoFollow(mode) {
       let artalkPromise = await Promise.all(
         artalkList.map(async (item) => {
           try {
-            let formData = new FormData();
-            formData.append('type', 'page_comment');
-            formData.append('page_keys', item.urls.join(','));
-            formData.append('site_name', item.site_name);
-            let response = await fetch(`${item.envId}/api/stat`, {
-              method: 'POST',
-              body: formData
-            });
+            let pageKeys = item.urls.join(',');
+            let siteName = item.site_name;
+            let response = await fetch(`${item.envId}/api/v2/stats/page_comment?page_keys=${pageKeys}&site_name=${siteName}`);
             if (!response.ok) {
-              throw new Error(`Request failed for ${item.envId}/api/stat`);
+              throw new Error(`Request failed`);
             }
             let results = await response.json();
             let countList = item.urls.map(url => {
