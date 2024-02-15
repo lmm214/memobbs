@@ -627,7 +627,10 @@ async function updateHtml(data) {
         if (resexlink) {
             imgLink = resexlink
         } else {
-            fileId = `${resourceList[j].name}?thumbnail=1` || `${resourceList[j].id}`;
+            fileId = resourceList[j].id;
+            if(resourceList[j].name !== undefined){
+              fileId = resourceList[j].name+"?thumbnail=1"
+            }
             imgLink = `${memo.link}/o/r/${fileId}`;
         }
         if (restype == 'image') {
