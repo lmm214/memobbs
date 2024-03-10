@@ -1,5 +1,5 @@
 /**
- * memos.js 24.2.9
+ * memos.js 24.3.10
  * https://immmmm.com/
  */
 var memosData = {
@@ -545,6 +545,7 @@ async function updateHtml(data) {
     });
   for (var i = 0; i < data.length; i++) {
     let memo = data[i];
+    console.log(memo)
     let link = memo.link;
     let memoString = JSON.stringify(memo).replace(/"/g, '&quot;');
     let avatar = memo.avatar;
@@ -559,7 +560,7 @@ async function updateHtml(data) {
     let twikooEnv = memo.twikoo;
     let artalkEnv = memo.artalk;
     let artSite = `${memo.artSite}`;
-    let memosLink = memo.link + "/m/" + memo.id;
+    let memosLink = memo.link + "/m/" + (memo.name || memo.id);
     let memosRes = memo.content
       .replace(TAG_REG, "")
       .replace(IMG_REG, "")
