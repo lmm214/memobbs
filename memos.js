@@ -545,7 +545,7 @@ async function updateHtml(data) {
     });
   for (var i = 0; i < data.length; i++) {
     let memo = data[i];
-    console.log(memo)
+    //console.log(memo)
     let link = memo.link;
     let memoString = JSON.stringify(memo).replace(/"/g, '&quot;');
     let avatar = memo.avatar;
@@ -1518,7 +1518,7 @@ function deleteMemo(memoId) {
 function viaNow(e){
   let dataForm = JSON.parse(e.getAttribute("data-form"));
   let memoName = dataForm.creatorName
-  let memoLink = dataForm.link+ "/m/" + dataForm.id;
+  let memoLink = dataForm.link+ "/m/" + (dataForm.name || dataForm.id);
   let memoContent = dataForm.content
   if(memoContent.length > 120){
     memoContent = memoContent.substring(0, 119) + '...';
