@@ -1,5 +1,5 @@
 /**
- * memos.js 24.3.10
+ * memos.js 24.4.18
  * https://immmmm.com/
  */
 var memosData = {
@@ -1255,7 +1255,7 @@ async function fetchNeoDB(url,mode){
   let dbFetch = await response.json();
   let neodbDom = `<div class="db-card">
     <div class="db-card-subject">
-        <div class="db-card-post"><img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${dbFetch.cover_image_url}"></div>
+        <div class="db-card-post"><img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="https://cors.immmmm.com/${dbFetch.cover_image_url}"></div>
         <div class="db-card-content">
             <div class="db-card-title"><a href="${url}" class="cute" target="_blank" rel="noreferrer">${dbFetch.title}</a></div>
             <div class="rating"><span class="allstardark"><span class="allstarlight" style="width:${dbFetch.rating*10}%"></span></span><span class="rating_nums">${dbFetch.rating}</span></div>
