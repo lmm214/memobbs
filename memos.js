@@ -1,5 +1,5 @@
 /**
- * memos.js 24.4.18
+ * memos.js 24.4.21
  * https://immmmm.com/
  */
 var memosData = {
@@ -625,7 +625,9 @@ async function updateHtml(data) {
             imgLink = resexlink
         } else {
             fileId = resourceList[j].id;
-            if(resourceList[j].name !== undefined){
+            if(resourceList[j].uid !== undefined){
+              fileId = resourceList[j].uid
+            }else if(resourceList[j].name !== undefined){
               fileId = resourceList[j].name+"?thumbnail=1"
             }
             imgLink = `${memo.link}/o/r/${fileId}`;
