@@ -103,27 +103,15 @@
     "creatorName": "大大的小蜗牛",
     "website" : "https://www.eallion.com",
     "link" : "https://memos.eallion.com",
+    "v1": "memos",
     "creatorId" : "101",
     "avatar": "https://gravatar.memobbs.app/avatar/171e4c30959e8c077a6c58b958624b31?s=80"
-  },{
-    "creatorName": "拾月",
-    "website" : "https://www.skyue.com",
-    "link" : "https://memos.skyue.com",
-    "creatorId" : "1",
-    "avatar": "https://gravatar.memobbs.app/avatar/c3fb4bb4d5101284ddd672fb722cdd7d?s=80"
   },{
     "creatorName": "l1nsn0w",
     "website" : "https://blog.linsnow.cn",
     "link" : "https://memos.linsnow.cn",
     "creatorId" : "1",
     "avatar": "https://gravatar.memobbs.app/avatar/9f5d9e5efe3bea0139b12a0fe27100fe?s=80"
-  },{
-    "creatorName" : "XIGE",
-    "website" : "https://www.xigeshudong.com",
-    "link" : "https://memos.xigeshudong.com",
-    "creatorId" : "1",
-    "avatar" : "https://cravatar.cn/avatar/226224b568d3d0e42de4aff0709a7ca5?s=80",
-    "twikoo" : "https://twikoo.xigeshudong.com"
   },{
     "creatorName": "LEO",
     "website" : "https://www.isolitude.cn",
@@ -208,15 +196,10 @@
     "creatorId" : "1",
     "avatar": "https://www.domon.cn/content/images/size/w150/2020/06/xavatar_shiba-3.jpg.pagespeed.ic.3PcXeGZpNB.webp"
   },{
-    "creatorName": "青南",
-    "website" : "https://kingname.info",
-    "link" : "https://memos.kingname.info",
-    "creatorId" : "1",
-    "avatar": "https://gravatar.memobbs.app/avatar/2463f1bd85aea23703f320e67d33f349?s=80"
-  },{
     "creatorName": "linyuxuanlin",
     "website" : "https://wiki-power.com",
     "link" : "https://memos.wiki-power.com",
+    "v1":"memos",
     "creatorId" : "1",
     "avatar": "https://gravatar.memobbs.app/avatar/44218020ee434de43516c19f05c71593?s=80"
   },{
@@ -235,6 +218,7 @@
     "creatorName": "北海轻歌",
     "website" : "https://www.4op.top",
     "link" : "https://flomo.010316.xyz",
+    "v1":"memos",
     "creatorId" : "1",
     "avatar": "https://gravatar.memobbs.app/avatar/81f9378195d84e8ff73aad9ded2b9808?s=80"
   },{
@@ -288,6 +272,7 @@
     "creatorName": "凉心",
     "website": "https://www.lxink.cn",
     "link": "https://memos.lxink.cn",
+    "v1":"memos",
     "creatorId": "1",
     "avatar": "https://gravatar.memobbs.app/avatar/3e9a1d339e79ce782f92d52bf9127ae1?size=80",
     "twikoo": "https://twikoo.lxink.cn"
@@ -295,15 +280,9 @@
     "creatorName": "熠熠",
     "website": "https://blog.fengyiyi.com",
     "link": "https://m.1v1.design",
+    "v1":"memos",
     "creatorId": "1",
     "avatar": "https://r2.immmmm.com/2024/02/fengyiyi.png"
-  },{
-    "creatorName" : "上杉九月",
-    "website" : "https://blog.sakurasep.site",
-    "link" : "https://memos.sakurasep.site",
-    "creatorId" : "1",
-    "avatar" : "https://bu.dusays.com/2023/03/13/640dfc9720adc.png",
-    "twikoo": "https://twikoo.sakurasep.top"
   },{
     "creatorName": "lniaen",
     "website" : "https://lniaen.com",
@@ -320,6 +299,7 @@
     "creatorName": "Marcus",
     "website" : "https://blog.marcus233.top",
     "link" : "https://memos.marcus233.top",
+    "v1":"memos",
     "creatorId" : "1",
     "twikoo" : "https://twikoo.marcus233.top",
     "avatar": "https://gravatar.memobbs.app/avatar/c53070663255a0361b911623a60dcc8aeea78b32f3281b96cdc53a03818a1a48?size=80"
@@ -327,6 +307,7 @@
     "creatorName": "XXL",
     "website" : "https://memos.lxx.pw",
     "link" : "https://memos.lxx.pw",
+    "v1":"memos",
     "creatorId" : "101",
     "twikoo" : "https://twikoo.lxx.pw",
     "avatar": "https://cravatar.cn/avatar/c50facf0ac4c3e23c1c1b2baa6c9e353?s=80"
@@ -344,14 +325,6 @@
     "artalk" : "https://comments.xiewei.link",
     "artSite" : "memos",
     "avatar": "https://gravatar.memobbs.app/avatar/84643ed4149cca17b1b74a2900ebaff2?s=80"
-  },{
-    "creatorName": "小赵同学",
-    "website": "https://usj.cc/",
-    "link": "https://memos.usj.cc",
-    "creatorId": "1",
-    "avatar": "https://gravatar.memobbs.app/avatar/1cce0a22c2c7648eab76ec876c6a54d9?s=80",
-    "artalk": "https://artalk.usj.cc",
-    "artSite": "优世界"
   },{
     "creatorName": "Pipu",
     "website": "https://pipuwong.com",
@@ -376,21 +349,13 @@
     "artalk": "https://atk.suuus.top",
     "artSite": "memos"
   },{
-    "creatorName": "斌仔",
-    "website" : "https://www.wangdu.site",
-    "link" : "https://bw.wangdu.site:4730",
-    "creatorId" : "101",
-    "twikoo" : "https://wwsay.wangdu.site",
-    "avatar": "https://gravatar.memobbs.app/avatar/3f86f3f1aa105924d030b7d3040a0037?s=80"
-  },{
-    "creatorName": "段先森",
-    "website" : "https://memos.duanxiansen.com/",
-    "link" : "https://memos.duanxiansen.com/",
+    "creatorName": "admin",
+    "website" : "https://nice2cu.cc",
+    "link" : "https://memos.nice2cu.cc",
+    "v1":"memos",
     "creatorId" : "1",
-    "twikoo" : "https://artalk.duanxiansen.com/",
     "avatar": "https://gravatar.memobbs.app/avatar/f97a316ab16d2db014f66e4d62d2b624?s=80"
   }
-
 
 ]
 }

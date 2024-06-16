@@ -1108,6 +1108,11 @@ function reloadUser(mode){
 
 // 获取指定用户列表
 async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
+    let matchedV1;
+    let matchedMemo = memoList.find(item => (item.link === link))
+    if(matchedMemo.v1){
+      matchedV1 = matchedMemo.v1
+    }
     memoDom.innerHTML = skeleton;
     loadBtn.classList.add('d-none');
     randomUserBtn.classList.add("noclick")
@@ -1134,7 +1139,12 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
         userMemoUrl = `${link}/api/v1/memo?&limit=1&offset=${random}`;
       }
     }else{
-      userMemoUrl = `${link}/api/v1/memo?creatorId=${id}&rowStatus=NORMAL&limit=50`;
+      if (matchedV1) {
+        const filter = `creator=='users/${id}'&&visibilities==['PUBLIC']`
+        userMemoUrl = `${link}/api/v1/memos?pageSize=50&filter=${encodeURIComponent(filter)}`
+      }else{
+        userMemoUrl = `${link}/api/v1/memo?creatorId=${id}&rowStatus=NORMAL&limit=50`;
+      }
     }
 
     if (link == memosPath) {
@@ -1149,6 +1159,7 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
         });
         if (response.ok) {
           let data = await response.json();
+          if(matchedV1){data = data.memos}
           let oneDayTag = window.localStorage && window.localStorage.getItem("memos-oneday-tag");
           let oneDayTagCount = window.localStorage && window.localStorage.getItem("memos-oneday-count");
           if( oneDayTag !== null && oneDayTagCount !== null && !search ){
@@ -1214,6 +1225,9 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
             throw new Error(response.statusText);
           }
           let data = await response.json();
+          if(matchedV1){data = data.memos}
+
+          console.log(data)
           memoData = data.flatMap(result => result);
           memoList.forEach(item => {
             memoCreatorMap[item.creatorName] = item;
