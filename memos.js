@@ -560,7 +560,7 @@ async function updateHtml(data) {
     let twikooEnv = memo.twikoo;
     let artalkEnv = memo.artalk;
     let artSite = `${memo.artSite}`;
-    let memosLink = memo.link + "/m/" + (memo.name || memo.id);
+    let memosLink = memo.link + "/m/" + (memo.uid || memo.name || memo.id);
     let memosRes = memo.content
       .replace(TAG_REG, "")
       .replace(IMG_REG, "")
@@ -734,35 +734,52 @@ async function getMemos(search) {
   loadBtn.classList.add("d-none");
   let results;
   if(search && search != "" && search != null ){
-    results = await Promise.allSettled(memoList.map(u => 
-      withTimeout(2000, fetch(`${u.link}/api/v1/memo?creatorId=${u.creatorId}&content=${search}&rowStatus=NORMAL&limit=${limit}`)
+    results = await Promise.allSettled(memoList.map(u => {
+      const fetchUrl = `${u.link}/api/v1/memo?creatorId=${u.creatorId}&content=${search}&rowStatus=NORMAL&limit=${limit}`;
+      return withTimeout(2000, fetch(fetchUrl)
         .then(response => {
           if (!response.ok) {
-            throw new Error(res.statusText); 
+            throw new Error(response.statusText); 
           }
           return response.json();
         })
-    )));
+      );
+    }));
   }else{
-    results = await Promise.allSettled(memoList.map(u => 
-      withTimeout(2000, fetch(`${u.link}/api/v1/memo?creatorId=${u.creatorId}&rowStatus=NORMAL&limit=${limit}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(res.statusText); 
+    results = await Promise.allSettled(memoList.map(async(u) => {
+      let matchedMemo = memoList.find(item => item.link === u.link);
+      let matchedV1 = matchedMemo ? matchedMemo.v1 : undefined;
+      let fetchUrl;
+      if (matchedV1) {
+        const filter = `creator=='users/${matchedMemo.creatorId}'&&visibilities==['PUBLIC']`
+        fetchUrl = `${u.link}/api/v1/memos?pageSize=${limit}&filter=${encodeURIComponent(filter)}`
+      }else{
+        fetchUrl = `${u.link}/api/v1/memo?creatorId=${u.creatorId}&rowStatus=NORMAL&limit=${limit}`;
+      }
+
+      const response = await withTimeout(2000, fetch(fetchUrl));
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      const data = await response.json();
+      const memosData = matchedV1 ? data.memos : data;
+
+      memosData.forEach(item => {
+        if (matchedV1 && item.createTime) {
+          item.createdTs = Math.floor(new Date(item.createTime).getTime() / 1000);
+        }
+        for (let key in matchedMemo) {
+          if (matchedMemo.hasOwnProperty(key)) {
+            item[key] = matchedMemo[key];
           }
-          return response.json();
-        })
-    )));
+        }
+      });
+      return memosData
+    }));
   }
   results = results.filter(i => i.status === 'fulfilled');
   memoData = results.flatMap(result => result.value);
-  memoList.forEach(item => {
-    memoCreatorMap[item.creatorName] = item;
-  });
-  memoData = memoData.map(item => {
-    let data = memoCreatorMap[item.creatorName];
-    return {...item, ...data};
-  });
+
   //memoData = await getMemoCount(memoData);
   memoDom.innerHTML = "";
   this.updateData(memoData);
@@ -1225,17 +1242,28 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
             throw new Error(response.statusText);
           }
           let data = await response.json();
-          if(matchedV1){data = data.memos}
-
-          console.log(data)
-          memoData = data.flatMap(result => result);
-          memoList.forEach(item => {
-            memoCreatorMap[item.creatorName] = item;
-          });
-          memoData = memoData.map(item => {
-            let data = memoCreatorMap[item.creatorName];
-            return {...item, ...data};
-          });
+          if(matchedV1){
+            data = data.memos
+            let creatorName = name
+            let creatorId = id
+            let linkFind = memoList.find(item => (item.link == link));
+            let website = linkFind ? linkFind.website : undefined;
+            memoData = data.flatMap(result => result);
+            memoData = memoData.map(item => {
+              let cTime =  new Date(item.createTime)
+              let createdTs = Math.floor(cTime.getTime() / 1000);
+              return {...item, creatorName,avatar,createdTs,creatorId,link,website};
+            });
+          }else{
+            memoData = data.flatMap(result => result);
+            memoList.forEach(item => {
+              memoCreatorMap[item.creatorName] = item;
+            });
+            memoData = memoData.map(item => {
+              let data = memoCreatorMap[item.creatorName];
+              return {...item, ...data};
+            });
+          }
           memoData = await this.getMemoCount(memoData);
           memoDom.innerHTML = "";
           this.updateData(memoData);
@@ -1263,8 +1291,6 @@ async function fetchNeoDB(url,mode){
   if(mode == "douban"){
     urlNow = "https://api-neodb.immmmm.com/?url="+url
   }else if(mode = "neodb"){
-
-    console.log(url)
     urlNow = url.replace("social/","social/api/")
   }
   let response = await fetch(urlNow);
@@ -2274,9 +2300,7 @@ async function sendToGemini(memosContent) {
     }
     const text = new TextDecoder().decode(value)
     const match = text.match(/DONE/)
-    //console.log(match)
     if(!match){
-      //console.log(text.substring(5))
       const textJson = JSON.parse(text.substring(5))
       const resData = textJson.choices[0].delta.content
       if(resData.length > 0){
