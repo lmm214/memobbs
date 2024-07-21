@@ -1,5 +1,5 @@
 /**
- * memos.js 24.4.21
+ * memos.js 24.7.21
  * https://immmmm.com/
  */
 var memosData = {
@@ -20,7 +20,7 @@ var memoDefaultList = [
     "twikoo": "https://metk.edui.fun"
   },{
     "creatorName": "归臧",
-    "website": "https://nuoea.com/",
+    "website": "https://nuoea.com",
     "link": "https://memos.nuoea.com",
     "creatorId": "101",
     "avatar": "https://gravatar.memobbs.app/avatar/020d365ea2596ef6d516143bb0552704?s=80",
@@ -261,6 +261,7 @@ let nowLink;
 let nowId;
 let nowName;
 let nowAvatar;
+let nowV1;
 let nowTagList = "";
 var memoChangeDate = 0;
 var getSelectedValue = window.localStorage && window.localStorage.getItem("memos-visibility-select") || "PUBLIC";
@@ -333,6 +334,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   nowId = memosMeID || memoList[0].creatorId;
   nowName = memosMeNickname || memoList[0].creatorName;
   nowAvatar = memosMeAvatarUrl || memoList[0].avatar;
+  nowV1 = memoList[0].v1 || 'memo'
   memoFollow(getMode);
   getEditIcon();
 });
@@ -394,7 +396,7 @@ function memoFollow(mode) {
             urls: []
           };
         }
-        twikooRes[creatorName].urls.push(`${link}/m/${id}`);
+        twikooRes[creatorName].urls.push(`${link}m/${id}`);
       }
       let twikooList = Object.values(twikooRes);
       let twikooPromise = await Promise.all(
@@ -1144,23 +1146,23 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
     };
     let userMemoUrl;
     if(tag && (random == null || random == "" )){
-      userMemoUrl = `${link}/api/v1/memo?creatorId=${id}&tag=${tag}&rowStatus=NORMAL&limit=50`;
+      userMemoUrl = `${link}api/v1/memo?creatorId=${id}&tag=${tag}&rowStatus=NORMAL&limit=50`;
     }else if(search){
-      userMemoUrl = `${link}/api/v1/memo?creatorId=${id}&content=${search}&rowStatus=NORMAL&limit=${limit}`;
+      userMemoUrl = `${link}api/v1/memo?creatorId=${id}&content=${search}&rowStatus=NORMAL&limit=${limit}`;
     }else if(mode == "NOPUBLIC"){
-      userMemoUrl = `${link}/api/v1/memo`;
+      userMemoUrl = `${link}api/v1/memo`;
     }else if(random){
       if(tag){
-        userMemoUrl = `${link}/api/v1/memo?tag=${tag}&limit=1&offset=${random}`;
+        userMemoUrl = `${link}api/v1/memo?tag=${tag}&limit=1&offset=${random}`;
       }else{
-        userMemoUrl = `${link}/api/v1/memo?&limit=1&offset=${random}`;
+        userMemoUrl = `${link}api/v1/memo?&limit=1&offset=${random}`;
       }
     }else{
       if (matchedV1) {
         const filter = `creator=='users/${id}'&&visibilities==['PUBLIC']`
-        userMemoUrl = `${link}/api/v1/memos?pageSize=50&filter=${encodeURIComponent(filter)}`
+        userMemoUrl = `${link}api/v1/memos?pageSize=50&filter=${encodeURIComponent(filter)}`
       }else{
-        userMemoUrl = `${link}/api/v1/memo?creatorId=${id}&rowStatus=NORMAL&limit=50`;
+        userMemoUrl = `${link}api/v1/memo?creatorId=${id}&rowStatus=NORMAL&limit=50`;
       }
     }
 
@@ -1176,12 +1178,14 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
         });
         if (response.ok) {
           let data = await response.json();
-          if(matchedV1){data = data.memos}
+          if(nowV1 == "memos"){
+            data = data.memos
+          }
           let oneDayTag = window.localStorage && window.localStorage.getItem("memos-oneday-tag");
           let oneDayTagCount = window.localStorage && window.localStorage.getItem("memos-oneday-count");
           if( oneDayTag !== null && oneDayTagCount !== null && !search ){
             let randomOneNum = Math.floor(Math.random() * oneDayTagCount)
-            let oneDayUrl = `${link}/api/v1/memo?tag=${oneDayTag}&limit=1&offset=${randomOneNum}`
+            let oneDayUrl = `${link}api/v1/memo?tag=${oneDayTag}&limit=1&offset=${randomOneNum}`
             //console.log(oneDayUrl)
             try {
               let responseOne = await fetch(oneDayUrl,{
@@ -1214,17 +1218,30 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
             data = data.filter((item) => item.visibility !== "PUBLIC");
           }
           memoData = data.flatMap(result => result);
-          memoList.forEach(item => {
-            memoCreatorMap[item.creatorName] = item;
-          });
-          memoData = memoData.map(item => {
-            let data = memoCreatorMap[item.creatorName];
-            return {...item, ...data};
-          });
+          if(nowV1 == "memos"){
+            let creatorName = name
+            let creatorId = id
+            let linkFind = memoList.find(item => (item.link == link));
+            let website = linkFind ? linkFind.website : undefined;
+            memoData = memoData.map(item => {
+              let cTime =  new Date(item.createTime)
+              let createdTs = Math.floor(cTime.getTime() / 1000);
+              return {...item, creatorName,avatar,createdTs,creatorId,link,website};
+            });
+          }else{
+            memoList.forEach(item => {
+              memoCreatorMap[item.creatorName] = item;
+            });
+            memoData = memoData.map(item => {
+              let data = memoCreatorMap[item.creatorName];
+              return {...item, ...data};
+            });
+          }
           if (mode !== "NOPUBLIC") {
             memoData = await this.getMemoCount(memoData);
           }
           memoDom.innerHTML = "";
+          console.log(memoData)
           this.updateData(memoData);
           if(!random && memoData.length >= 8 ){
             setTimeout(function() {
@@ -1915,7 +1932,7 @@ function getEditIcon() {
     let  hasContent = memosContent.length !== 0;
     if (memosOpenId && hasContent) {
       submitMemoBtn.classList.add("noclick")
-      let memoUrl = `${memosPath}/api/v1/memo`;
+      let memoUrl = `${memosPath}/api/v1/${nowV1}`;
       let memoBody = {content:memosContent,relationList:memosRelation,resourceIdList:memosResource,visibility:memosVisibility}
       fetch(memoUrl, {
         method: 'POST',
@@ -1926,8 +1943,8 @@ function getEditIcon() {
         }
       }).then(function (res) {
         if (res.status == 200) {
-          if (memosTag !== null) {
-            let memoTagUrl = `${memosPath}/api/v1/tag`;
+          if (memosTag !== null && nowV1 !== 'memos') {
+            let memoTagUrl = `${memosPath}api/v1/tag`;
             (async () => {
               for await (const i of memosTag) {
                 const response = await fetch(memoTagUrl, {
@@ -1968,21 +1985,30 @@ function getEditIcon() {
       memosEditorOption.classList.remove("d-none"); 
       cocoMessage.info('请设置 Access Tokens');
     }else{
-      const tagUrl = `${memosPath}/api/v1/tag`;
+      let tagUrl = `${memosPath}/api/v1/tag`;
+      if(nowV1 == 'memos'){
+        var filter = "?filter=" + encodeURIComponent(`creator == 'users/${memosMeID}'`);
+        tagUrl = memosPath+'api/v1/memos/-/tags' + filter;
+      }
       const response = fetch(tagUrl,{
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${memosOpenId}`,
           'Content-Type': 'application/json'
         } 
-      }).then(response => response.json()).then(resdata => {
-        return resdata
-      }).then(response => {
+      }).then(resdata => resdata.json()).then(response => {
         let taglist = "";
-        response.map((t)=>{
-          nowTagList += `${t},`;
-          taglist += `<div class="memos-tag d-flex text-xs mt-2 mr-2 px-2" onclick="setMemoTag(this)">#${t}</div>`;
-        })
+        if(nowV1 == 'memos'){
+          Object.keys(response.tagAmounts).map((t)=>{
+            nowTagList += `${t},`;
+            taglist += `<div class="memos-tag d-flex text-xs mt-2 mr-2 px-2" onclick="setMemoTag(this)">#${t}</div>`;
+          })
+        }else{
+          response.map((t)=>{
+            nowTagList += `${t},`;
+            taglist += `<div class="memos-tag d-flex text-xs mt-2 mr-2 px-2" onclick="setMemoTag(this)">#${t}</div>`;
+          })
+        }
         document.querySelector(".memos-tag-list").innerHTML = taglist;
         //cocoMessage.success('准备就绪');
         memosEditorInner.classList.remove("d-none");
@@ -2002,20 +2028,35 @@ function getEditIcon() {
   }
 
   async function getMemosData(p,t) {
+    if (p.length > 0 && !p.endsWith('/')) {
+      p += '/';
+    }
     try {
-      let response = await fetch(`${p}/api/v1/user/me`,{//api/v1/status,memo;api/v1/user/me
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${t}`,
-          'Content-Type': 'application/json'
-        } 
-      });
+      let response;
+      if(nowV1 == 'memos'){
+        response = await fetch(`${p}api/v1/auth/status`,{
+          async: true,
+          crossDomain: true,
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${t}`
+          } 
+        });
+      }else{
+        response = await fetch(`${p}api/v1/user/me`,{
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${t}`,
+            'Content-Type': 'application/json'
+          } 
+        });
+      }
       if (response.ok) {
         let resdata = await response.json();
         if (resdata) {
           memosMeID = resdata.id;
-          memosMeNickname = resdata.nickname;
-          memosMeAvatarUrl = resdata.avatarUrl;
+          memosMeNickname = resdata.nickname || resdata.username ;
+          memosMeAvatarUrl = resdata.avatarUrl || "https://memobbs.app/pwa/48.png";
           window.localStorage && window.localStorage.setItem("memos-access-path", p);
           window.localStorage && window.localStorage.setItem("memos-access-token", t);
           window.localStorage && window.localStorage.setItem("memos-visibility-select","PUBLIC");
