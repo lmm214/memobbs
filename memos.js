@@ -1999,6 +1999,9 @@ function getEditIcon() {
       memosEditorOption.classList.remove("d-none"); 
       cocoMessage.info('请设置 Access Tokens');
     }else{
+      if (!memosPath.endsWith('/')) {
+        memosPath += '/';
+      }
       let tagUrl = `${memosPath}api/v1/tag`;
       if(nowV1 == 'memos'){
         var filter = "?filter=" + encodeURIComponent(`creator == 'users/${memosMeID}'`);
@@ -2058,7 +2061,7 @@ function getEditIcon() {
         });
       }else{
         response = await fetch(`${p}api/v1/user/me`,{
-          method: 'POST',
+          method: 'GET',
           headers: {
             'Authorization': `Bearer ${t}`,
             'Content-Type': 'application/json'
