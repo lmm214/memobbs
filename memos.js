@@ -331,6 +331,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   nowLink = memosPath || memoList[0].link;
+  if (!nowLink.endsWith('/')) {
+    nowLink += '/';
+  }
   nowId = memosMeID || memoList[0].creatorId;
   nowName = memosMeNickname || memoList[0].creatorName;
   nowAvatar = memosMeAvatarUrl || memoList[0].avatar;
@@ -737,7 +740,11 @@ async function getMemos(search) {
   let results;
   if(search && search != "" && search != null ){
     results = await Promise.allSettled(memoList.map(u => {
-      const fetchUrl = `${u.link}/api/v1/memo?creatorId=${u.creatorId}&content=${search}&rowStatus=NORMAL&limit=${limit}`;
+      let uLink = u.link
+      if (!uLink.endsWith('/')) {
+        uLink += '/';
+      }
+      const fetchUrl = `${uLink}api/v1/memo?creatorId=${u.creatorId}&content=${search}&rowStatus=NORMAL&limit=${limit}`;
       return withTimeout(2000, fetch(fetchUrl)
         .then(response => {
           if (!response.ok) {
@@ -752,11 +759,15 @@ async function getMemos(search) {
       let matchedMemo = memoList.find(item => item.link === u.link);
       let matchedV1 = matchedMemo ? matchedMemo.v1 : undefined;
       let fetchUrl;
+      let uLink = u.link
+      if (!uLink.endsWith('/')) {
+        uLink += '/';
+      }
       if (matchedV1) {
         const filter = `creator=='users/${matchedMemo.creatorId}'&&visibilities==['PUBLIC']`
-        fetchUrl = `${u.link}/api/v1/memos?pageSize=${limit}&filter=${encodeURIComponent(filter)}`
+        fetchUrl = `${uLink}api/v1/memos?pageSize=${limit}&filter=${encodeURIComponent(filter)}`
       }else{
-        fetchUrl = `${u.link}/api/v1/memo?creatorId=${u.creatorId}&rowStatus=NORMAL&limit=${limit}`;
+        fetchUrl = `${uLink}api/v1/memo?creatorId=${u.creatorId}&rowStatus=NORMAL&limit=${limit}`;
       }
 
       const response = await withTimeout(2000, fetch(fetchUrl));
@@ -1141,6 +1152,10 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
     let usernowAvatar = document.querySelector(".user-now-avatar");
     usernowName.innerHTML = name;
     usernowAvatar.src = avatar;
+    if (!link.endsWith('/') || !memosPath.endsWith('/')) {
+      link += '/';
+      memosPath += '/';
+    }
     if (link == memosPath) {
       memosAccess = 1;
     };
@@ -1241,7 +1256,7 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
             memoData = await this.getMemoCount(memoData);
           }
           memoDom.innerHTML = "";
-          console.log(memoData)
+          //console.log(memoData)
           this.updateData(memoData);
           if(!random && memoData.length >= 8 ){
             setTimeout(function() {
@@ -1401,7 +1416,7 @@ function saveMemo(memo) {
     let  hasContent = memosContent.length !== 0;
     if (memosOpenId && hasContent) {
       submitMemoBtn.classList.add("noclick")
-      let memoUrl = `${memosPath}/api/v1/memo`;
+      let memoUrl = `${memosPath}api/v1/memo`;
       let memoBody = {content:memosContent,visibility:"PRIVATE"}
       fetch(memoUrl, {
         method: 'POST',
@@ -1468,7 +1483,7 @@ editMemoBtn.addEventListener("click", function () {
   }
   let hasContent = memoContent.length !== 0;
   if (hasContent) {
-    let memoUrl = `${memosPath}/api/v1/memo/${memoId}`;
+    let memoUrl = `${memosPath}api/v1/memo/${memoId}`;
     let memoBody = {content:memoContent,id:memoId,createdTs:memocreatedTs,relationList:memoRelationList,resourceIdList:memoResourceList,visibility:memoVisibility}
     fetch(memoUrl, {
       method: 'PATCH',
@@ -1522,7 +1537,7 @@ function archiveMemo(memoId) {
   if(isOk){
     memosOpenId = window.localStorage && window.localStorage.getItem("memos-access-token");
     if(memosOpenId && memoId){
-      let memoUrl = `${memosPath}/api/v1/memo/${memoId}`;
+      let memoUrl = `${memosPath}api/v1/memo/${memoId}`;
       let memoBody = {id:memoId,rowStatus:"ARCHIVED"};
       fetch(memoUrl, {
         method: 'PATCH',
@@ -1551,7 +1566,7 @@ function deleteMemo(memoId) {
   if(isOk){
     memosOpenId = window.localStorage && window.localStorage.getItem("memos-access-token");
     if(memosOpenId && memoId){
-      let memoUrl = `${memosPath}/api/v1/memo/${memoId}`;
+      let memoUrl = `${memosPath}api/v1/memo/${memoId}`;
       fetch(memoUrl, {
         method: 'DELETE',
         headers: {
@@ -1714,9 +1729,9 @@ function getEditIcon() {
     nowTagText = document.querySelector(".memos-tagnow-name") || ''
     if(nowTagText){
       nowTag = nowTagText.textContent;
-      userMemoUrl= `${nowLink}/api/v1/memo?tag=${nowTag}`
+      userMemoUrl= `${nowLink}api/v1/memo?tag=${nowTag}`
     }else{
-      userMemoUrl = `${nowLink}/api/v1/memo/stats?creatorId=${nowId}`
+      userMemoUrl = `${nowLink}api/v1/memo/stats?creatorId=${nowId}`
     }
     if(!memosAllCount || nowTagText){
       try {
@@ -1756,7 +1771,7 @@ function getEditIcon() {
     if (oneDayNow == null ) {
       let nowTag = document.querySelector(".memos-tagnow-name").textContent
       let nowTagCount;
-      let nowTagUrl= `${nowLink}/api/v1/memo?tag=${nowTag}`
+      let nowTagUrl= `${nowLink}api/v1/memo?tag=${nowTag}`
       try {
         let response = await fetch(nowTagUrl,{
             headers: {
@@ -1798,7 +1813,7 @@ function getEditIcon() {
   async function uploadWebpImage(data) {
     let memosResourceListNow = JSON.parse(window.localStorage && window.localStorage.getItem("memos-resource-list")) || [];
     let imageData = new FormData();
-    let blobUrl = `${memosPath}/api/v1/resource/blob`;
+    let blobUrl = `${memosPath}api/v1/resource/blob`;
     const webpData = await convertToWebP(data);
     const timestamp = new Date().getTime();
     const fileName = `${timestamp}_${Math.random()}.webp`;
@@ -1862,7 +1877,7 @@ function getEditIcon() {
   async function uploadImage(data) {
     let memosResourceListNow = JSON.parse(window.localStorage && window.localStorage.getItem("memos-resource-list")) || [];
     let imageData = new FormData();
-    let blobUrl = `${memosPath}/api/v1/resource/blob`;
+    let blobUrl = `${memosPath}api/v1/resource/blob`;
     imageData.append('file', data, data.name)
     let resp = await fetch(blobUrl, {
       method: "POST",
@@ -1932,7 +1947,7 @@ function getEditIcon() {
     let  hasContent = memosContent.length !== 0;
     if (memosOpenId && hasContent) {
       submitMemoBtn.classList.add("noclick")
-      let memoUrl = `${memosPath}/api/v1/${nowV1}`;
+      let memoUrl = `${memosPath}api/v1/${nowV1}`;
       let memoBody = {content:memosContent,relationList:memosRelation,resourceIdList:memosResource,visibility:memosVisibility}
       fetch(memoUrl, {
         method: 'POST',
@@ -1985,7 +2000,7 @@ function getEditIcon() {
       memosEditorOption.classList.remove("d-none"); 
       cocoMessage.info('请设置 Access Tokens');
     }else{
-      let tagUrl = `${memosPath}/api/v1/tag`;
+      let tagUrl = `${memosPath}api/v1/tag`;
       if(nowV1 == 'memos'){
         var filter = "?filter=" + encodeURIComponent(`creator == 'users/${memosMeID}'`);
         tagUrl = memosPath+'api/v1/memos/-/tags' + filter;
@@ -2353,7 +2368,7 @@ async function sendToGemini(memosContent) {
 }
 
 async function getMemosForAI(){
-  let fetchUrl = `${nowLink}/api/v1/memo?creatorId=${nowId}&limit=100`
+  let fetchUrl = `${nowLink}api/v1/memo?creatorId=${nowId}&limit=100`
   let response = await fetch(fetchUrl,{
     headers: {
       'Authorization': `Bearer ${memosOpenId}`,
