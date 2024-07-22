@@ -1943,7 +1943,7 @@ function getEditIcon() {
     memosOpenId = window.localStorage && window.localStorage.getItem("memos-access-token");
     let TAG_REG = /(?<=#)([^#\s!.,;:?"'()]+)(?= )/g;
     let memosTag = memosContent.match(TAG_REG);
-    let  hasContent = memosContent.length !== 0;
+    let hasContent = memosContent.length !== 0;
     if (memosOpenId && hasContent) {
       submitMemoBtn.classList.add("noclick")
       let memoUrl = `${memosPath}api/v1/${nowV1}`;
@@ -2047,23 +2047,31 @@ function getEditIcon() {
     }
     try {
       let response;
-      if(nowV1 == 'memos'){
-        response = await fetch(`${p}api/v1/auth/status`,{
+      try {
+        response = await fetch(`${p}api/v1/auth/status`, {
           async: true,
           crossDomain: true,
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${t}`
-          } 
+          }
         });
-      }else{
-        response = await fetch(`${p}api/v1/user/me`,{
+      
+        if (!response.ok) {
+          throw new Error('Failed to fetch auth status');
+        }
+      } catch (error) {
+        response = await fetch(`${p}api/v1/user/me`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${t}`,
             'Content-Type': 'application/json'
-          } 
+          }
         });
+      
+        if (!response.ok) {
+          throw new Error('Failed to fetch user info');
+        }
       }
       if (response.ok) {
         let resdata = await response.json();
