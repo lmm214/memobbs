@@ -1,5 +1,5 @@
 /**
- * memos.js 24.7.21
+ * memos.js 24.7.22
  * https://immmmm.com/
  */
 var memosData = {
@@ -1138,11 +1138,8 @@ function reloadUser(mode){
 
 // 获取指定用户列表
 async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
-    let matchedV1;
     let matchedMemo = memoList.find(item => (item.link === link))
-    if(matchedMemo.v1){
-      matchedV1 = matchedMemo.v1
-    }
+    let matchedV1 = matchedMemo ? matchedMemo.v1 : undefined;
     memoDom.innerHTML = skeleton;
     loadBtn.classList.add('d-none');
     randomUserBtn.classList.add("noclick")
@@ -1152,8 +1149,10 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
     let usernowAvatar = document.querySelector(".user-now-avatar");
     usernowName.innerHTML = name;
     usernowAvatar.src = avatar;
-    if (!link.endsWith('/') || !memosPath.endsWith('/')) {
+    if (!link.endsWith('/')) {
       link += '/';
+    }
+    if (memosPath && !memosPath.endsWith('/')) {
       memosPath += '/';
     }
     if (link == memosPath) {
