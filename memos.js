@@ -552,6 +552,9 @@ async function updateHtml(data) {
     let memo = data[i];
     //console.log(memo)
     let link = memo.link;
+    if (!link.endsWith('/')) {
+      link += '/';
+    }
     let memoString = JSON.stringify(memo).replace(/"/g, '&quot;');
     let avatar = memo.avatar;
     let count = memo.count || "";
@@ -565,7 +568,7 @@ async function updateHtml(data) {
     let twikooEnv = memo.twikoo;
     let artalkEnv = memo.artalk;
     let artSite = `${memo.artSite}`;
-    let memosLink = memo.link + "/m/" + (memo.uid || memo.name || memo.id);
+    let memosLink = link + "m/" + (memo.uid || memo.name || memo.id);
     let memosRes = memo.content
       .replace(TAG_REG, "")
       .replace(IMG_REG, "")
@@ -635,7 +638,7 @@ async function updateHtml(data) {
             }else if(resourceList[j].name !== undefined){
               fileId = resourceList[j].name+"?thumbnail=1"
             }
-            imgLink = `${memo.link}/o/r/${fileId}`;
+            imgLink = `${link}o/r/${fileId}`;
         }
         if (restype == 'image') {
           imgUrl += `<div class="memo-resource w-100"><img class="lozad" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="${imgLink}"/></div>`;
