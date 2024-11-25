@@ -399,7 +399,7 @@ function memoFollow(mode) {
             urls: []
           };
         }
-        twikooRes[creatorName].urls.push(`${link}m/${id}`);
+        twikooRes[creatorName].urls.push(`${link}/m/${id}`);
       }
       let twikooList = Object.values(twikooRes);
       let twikooPromise = await Promise.all(
@@ -418,6 +418,7 @@ function memoFollow(mode) {
         })
       );
       twikooCount = twikooPromise.flatMap(r => r);
+      //console.log(twikooCount)
     }
     let artalkData = m.filter(item => item.artalk);
     if (artalkData.length !== 0) {
@@ -1755,7 +1756,7 @@ function getEditIcon() {
         }
         let data = await response.json();
         nowTagCount = data.length - 1;
-        window.localStorage && window.localStorage.setItem("memos-oneday-tag",nowTag);
+        window.localStorage && window.localStorage.setItem("memos-oneday-tag", );
         window.localStorage && window.localStorage.setItem("memos-oneday-count",nowTagCount);
       } catch (error) {
         console.error(error);
