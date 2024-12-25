@@ -338,6 +338,13 @@
     "v1": "memos",
     "creatorId": "1",
     "avatar": "https://mybelife.com/file/users/1/avatar"
+  },{
+    "creatorName": "neweix",
+    "website" : "https://neweix.com",
+    "link" : "https://memos.neweix.com",
+    "v1": "memos",
+    "creatorId" : "1",
+    "avatar": "https://neweix.com/img/avatar.png"
   }
 
 ]
