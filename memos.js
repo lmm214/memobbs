@@ -596,13 +596,13 @@ async function updateHtml(data) {
         memosRes += `<div class="resource-wrapper"><div class="images-wrapper my-2" view-image>${memosImg}</div></div>`
     }
     // DoubanDB
-    let doudbArr = memo.content.match(DOUDB_LINK_REG);
-    let neodbDom = '';
-    if(doudbArr){
-      for(let k=0;k < doudbArr.length;k++){
-        neodbDom += await fetchNeoDB(doudbArr[k],"douban")
-      }
-    }
+    //let doudbArr = memo.content.match(DOUDB_LINK_REG);
+    //let neodbDom = '';
+    //if(doudbArr){
+    //  for(let k=0;k < doudbArr.length;k++){
+    //    neodbDom += await fetchNeoDB(doudbArr[k],"douban")
+    //  }
+    //}
     // DoubanDB
     let neodbArr = memo.content.match(NEODB_LINK_REG);
     if(neodbArr){
@@ -1290,9 +1290,10 @@ async function getUserMemos(link,id,name,avatar,tag,search,mode,random) {
 // Fetch NeoDB
 async function fetchNeoDB(url,mode){
   let urlNow;
-  if(mode == "douban"){
-    urlNow = "https://api-neodb.immmmm.com/?url="+url
-  }else if(mode = "neodb"){
+  //if(mode == "douban"){
+  //  urlNow = "https://api-neodb.immmmm.com/?url="+url
+  //}else
+  if(mode = "neodb"){
     urlNow = url.replace("social/","social/api/")
   }
   let response = await fetch(urlNow);
