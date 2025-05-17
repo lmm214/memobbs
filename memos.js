@@ -535,7 +535,7 @@ async function updateHtml(data) {
     LINE_REG = /\n/g,
     BLOCKQUDTE_REG = /\>.*$/g,
     CODE_REG = /\```.*$/g,
-    DOUDB_LINK_REG = /(https:\/\/(www|movie|book)\.douban\.com\/(game|subject)\/[0-9]+\/).*?/g,
+    //DOUDB_LINK_REG = /(https:\/\/(www|movie|book)\.douban\.com\/(game|subject)\/[0-9]+\/).*?/g,
     NEODB_LINK_REG = /(https:\/\/neodb\.social\/(game|movie|tv\/season|book)\/[0-9a-zA-Z]+)(?= )/g,
     BILIBILI_REG2 = /{ bilibili ([0-9a-zA-Z]+) }/g,
     BILIBILI_REG = /<a.*?href="https:\/\/www\.bilibili\.com\/video\/((av[\d]{1,10})|(BV([\w]{10})))\/?".*?>.*<\/a>/g,
@@ -573,7 +573,7 @@ async function updateHtml(data) {
     let memosRes = memo.content
       .replace(TAG_REG, "")
       .replace(IMG_REG, "")
-      .replace(DOUDB_LINK_REG, "")
+      //.replace(DOUDB_LINK_REG, "")
       .replace(NEODB_LINK_REG, "")
       .replace(LINK_REG, `<a class='primary' href='$2' target='_blank'>$1</a>`)
       memosRes = marked.parse(memosRes)
