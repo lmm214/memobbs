@@ -597,7 +597,7 @@ async function updateHtml(data) {
     }
     // DoubanDB
     //let doudbArr = memo.content.match(DOUDB_LINK_REG);
-    //let neodbDom = '';
+    let neodbDom = '';
     //if(doudbArr){
     //  for(let k=0;k < doudbArr.length;k++){
     //    neodbDom += await fetchNeoDB(doudbArr[k],"douban")
